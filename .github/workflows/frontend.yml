@@ -37,19 +37,28 @@ jobs:
           mkdir -p deploy_package
           cp -r dist/* deploy_package/
 
-      # 5. Setup SSH agent and add private key
-      - name: Setup SSH key
-        uses: webfactory/ssh-agent@v0.5.4
-        with:
-          # SSH_PRIVATE_KEY should include the unencrypted key;
-          # if it’s encrypted, you can provide SSH_PASSPHRASE too.
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          passphrase:    ${{ secrets.SSH_PASSPHRASE }}
+      # 5. Start ssh-agent and add your passphrase‑protected key
+      - name: Setup SSH agent with passphrase
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+        run: |
+          # Démarre l’agent
+          eval "$(ssh-agent -s)"
+          # Ajoute la clé en lui passant la passphrase
+          printf '%s\n' "$SSH_PASSPHRASE" | ssh-add - <<< "$SSH_PRIVATE_KEY"
+          # Vérifie que la clé est bien chargée
+          ssh-add -l
 
       # 6. Copy build to remote via scp
       - name: Copy to remote server
+        env:
+          SSH_PORT:     ${{ secrets.SSH_PORT }}
+          SSH_USER:     ${{ secrets.SSH_USER }}
+          SSH_HOST:     ${{ secrets.SSH_HOST }}
+          SSH_TARGET_PATH: ${{ secrets.SSH_TARGET_PATH }}
         run: |
           scp -o StrictHostKeyChecking=no \
-            -P "${{ secrets.SSH_PORT }}" \
+            -P "$SSH_PORT" \
             -r deploy_package/* \
-            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET_PATH }}"
+            "$SSH_USER@$SSH_HOST:$SSH_TARGET_PATH"
