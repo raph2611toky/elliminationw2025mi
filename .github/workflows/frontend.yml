@@ -39,21 +39,21 @@ jobs:
           cp -r dist/* deploy_package/
 
       # ✅ Check access to secrets (safely)
-      - name: Debug - Check Secrets Access
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_PASSPHRASE:  ${{ secrets.SSH_PASSPHRASE }}
-          SSH_USER:        ${{ secrets.SSH_USER }}
-          SSH_HOST:        ${{ secrets.SSH_HOST }}
-          SSH_PORT:        ${{ secrets.SSH_PORT }}
-          SSH_TARGET_PATH: ${{ secrets.SSH_TARGET_PATH }}
-        run: |
-          echo "SSH_PRIVATE_KEY is set: ${SSH_PRIVATE_KEY:+yes}"
-          echo "SSH_PASSPHRASE is set: ${SSH_PASSPHRASE:+yes}"
-          echo "SSH_USER is set: ${SSH_USER:+yes}"
-          echo "SSH_HOST is set: ${SSH_HOST:+yes}"
-          echo "SSH_PORT is set: ${SSH_PORT:+yes}"
-          echo "SSH_TARGET_PATH is set: ${SSH_TARGET_PATH:+yes}"
+      # - name: Debug - Check Secrets Access
+      #   env:
+      #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     SSH_PASSPHRASE:  ${{ secrets.SSH_PASSPHRASE }}
+      #     SSH_USER:        ${{ secrets.SSH_USER }}
+      #     SSH_HOST:        ${{ secrets.SSH_HOST }}
+      #     SSH_PORT:        ${{ secrets.SSH_PORT }}
+      #     SSH_TARGET_PATH: ${{ secrets.SSH_TARGET_PATH }}
+      #   run: |
+      #     echo "SSH_PRIVATE_KEY is set: ${SSH_PRIVATE_KEY:+yes}"
+      #     echo "SSH_PASSPHRASE is set: ${SSH_PASSPHRASE:+yes}"
+      #     echo "SSH_USER is set: ${SSH_USER:+yes}"
+      #     echo "SSH_HOST is set: ${SSH_HOST:+yes}"
+      #     echo "SSH_PORT is set: ${SSH_PORT:+yes}"
+      #     echo "SSH_TARGET_PATH is set: ${SSH_TARGET_PATH:+yes}"
 
       # 5. Start ssh-agent and add your passphrase‑protected key
       - name: Setup SSH agent with passphrase
