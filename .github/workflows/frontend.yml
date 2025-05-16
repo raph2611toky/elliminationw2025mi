@@ -8,6 +8,7 @@ jobs:
   build-and-deploy:
     name: Build & Deploy React.js App
     runs-on: ubuntu-latest
+    environment: webcup2025        # ← reference your environment here
 
     defaults:
       run:
@@ -37,14 +38,14 @@ jobs:
           mkdir -p deploy_package
           cp -r dist/* deploy_package/
 
-      # ✅ New Step: Check access to secrets (safely)
+      # ✅ Check access to secrets (safely)
       - name: Debug - Check Secrets Access
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_PASSPHRASE:  ${{ secrets.SSH_PASSPHRASE }}
+          SSH_USER:        ${{ secrets.SSH_USER }}
+          SSH_HOST:        ${{ secrets.SSH_HOST }}
+          SSH_PORT:        ${{ secrets.SSH_PORT }}
           SSH_TARGET_PATH: ${{ secrets.SSH_TARGET_PATH }}
         run: |
           echo "SSH_PRIVATE_KEY is set: ${SSH_PRIVATE_KEY:+yes}"
@@ -58,7 +59,7 @@ jobs:
       - name: Setup SSH agent with passphrase
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+          SSH_PASSPHRASE:  ${{ secrets.SSH_PASSPHRASE }}
         run: |
           eval "$(ssh-agent -s)"
           printf '%s\n' "$SSH_PASSPHRASE" | ssh-add - <<< "$SSH_PRIVATE_KEY"
