@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build Next.js app
+      - name: Build React.js app
         run: npm run build
 
       # 4. Prepare deploy package
