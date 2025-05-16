@@ -1,0 +1,55 @@
+name: CI/CD React
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy React.js App
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Set up Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+
+      # 3. Install deps & build
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Next.js app
+        run: npm run build
+
+      # 4. Prepare deploy package
+      - name: Package output
+        run: |
+          mkdir -p deploy_package
+          cp -r out/* deploy_package/
+
+      # 5. Setup SSH agent and add private key
+      - name: Setup SSH key
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          # SSH_PRIVATE_KEY should include the unencrypted key;
+          # if it’s encrypted, you can provide SSH_PASSPHRASE too.
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase:    ${{ secrets.SSH_PASSPHRASE }}
+
+      # 6. Copy build to remote via scp
+      - name: Copy to remote server
+        run: |
+          scp -o StrictHostKeyChecking=no \
+            -P "${{ secrets.SSH_PORT }}" \
+            -r deploy_package/* \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_TARGET_PATH }}"
