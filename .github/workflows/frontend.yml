@@ -35,7 +35,7 @@ jobs:
       - name: Package output
         run: |
           mkdir -p deploy_package
-          cp -r out/* deploy_package/
+          cp -r dist/* deploy_package/
 
       # 5. Setup SSH agent and add private key
       - name: Setup SSH key
