@@ -40,7 +40,7 @@ jobs:
       # ✅ New Step: Check access to secrets (safely)
       - name: Debug - Check Secrets Access
         run: |
-          echo "SSH_PRIVATE_KEY is set: ${SSH_PRIVATE_KEY:+yes}"
+          echo "SSH_PRIVATE_KEY is set: ${secrets.SSH_PRIVATE_KEY:+yes}"
           echo "SSH_PASSPHRASE is set: ${SSH_PASSPHRASE:+yes}"
           echo "SSH_USER is set: ${SSH_USER:+yes}"
           echo "SSH_HOST is set: ${SSH_HOST:+yes}"
