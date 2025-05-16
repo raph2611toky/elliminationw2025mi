@@ -32,7 +32,7 @@ jobs:
       - name: Package output
         run: |
           mkdir -p deploy_package
-          cp -r build/* deploy_package/
+          cp -r dist/* deploy_package/
 
       - name: Copy to remote server via SCP
         uses: appleboy/scp-action@v1
