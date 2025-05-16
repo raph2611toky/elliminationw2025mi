@@ -32,14 +32,14 @@ jobs:
       - name: Package output
         run: |
           mkdir -p deploy_package
-          cp -r dist/* deploy_package/
+          cp -r build/* deploy_package/
 
       - name: Copy to remote server via SCP
-        uses: graygorssgarten/github-scp@release
+        uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSPHRASE }}
           port: ${{ secrets.SSH_PORT }}
-          local: deploy_package
-          remote: ${{ secrets.SSH_TARGET_PATH }}
+          source: "deploy_package/*"
+          target: ${{ secrets.SSH_TARGET_PATH }}
