@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import {  Moon, Sun, Globe,Sparkles,ArrowUpRight } from "lucide-react"
 import { Link } from 'react-router-dom'; 
 import "./landingpage.css"
+import Dashboard from './dashboard';
+import Partenariat from './partenariat';
 function Landingpage() {
     const [darkMode, setDarkMode] = useState(true)
     const [language, setLanguage] = useState("fr")
@@ -51,9 +53,10 @@ function Landingpage() {
       name: Traduction("Fonctionalité", "Functionality", "Zava-misy"),
       href: "#Fonctionnalité",
     },
-    {
-      name: Traduction("Témoignage", "Sales", "Fivarotana"),
-      href: "Témoingnage",
+    
+     {
+      name: Traduction("Partenariat", "Partnership", "Mpiara-miasa"),
+      href: "#Partenariat",
     },
     {
       name: Traduction("Contact", "Contact", "Fifandraisana"),
@@ -68,13 +71,13 @@ function Landingpage() {
     { code: "mg", name: "Malagasy" },
   ]
   return (
-    <div  className={`min-h-screen transition-colors duration-300 ${
+    <div  className={`min-h-screen transition-colors duration-300  ${
        darkMode ? "bg-gray-100" : "bg-black"
       }`}>
 
-        <header>
+        <header className='sticky top-0 z-50 backdrop-blur-xl'>
           <motion.nav
-        className={`${scrolled ? "py-2" : "py-3"}`}
+        className={`${scrolled ? "py-2" : "py-2"}`}
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -175,7 +178,7 @@ function Landingpage() {
                 </button>
                 <motion.button
                   whileHover={{ scale: 1.1, rotate: 5 }}
-                  whileTap={{ scale: 0.9 }}  className={`button flex flex-1 text-xl px-5 rounded-xl py-2 text-black font-semibold duration-200`} style={{fontFamily:"Poppins"}}>
+                  whileTap={{ scale: 0.9 }}  className={` bg-gradient-to-r from-red-600 to-yellow-600  flex flex-1 text-xl px-5 rounded-xl py-2 text-black font-semibold duration-200`} style={{fontFamily:"Poppins"}}>
                   {Traduction("Commencer","Start Now","Andao ary e")}
               </motion.button>
               </div>
@@ -300,7 +303,7 @@ function Landingpage() {
             <div className='flex justify-center items-center'>
               <motion.button
                   whileHover={{ scale: 1.1, rotate: 5 }}
-                  whileTap={{ scale: 0.9 }}  className={`button flex flex-1 text-xl px-5 rounded-xl py-2 text-black font-semibold duration-200`} style={{fontFamily:"Poppins"}}>
+                  whileTap={{ scale: 0.9 }}  className={`bg-gradient-to-r from-red-700 to-yellow-700  flex flex-1 text-xl px-5 rounded-xl py-2 text-black font-semibold duration-200`} style={{fontFamily:"Poppins"}}>
                  <Link to="#"> 
                   {Traduction("Commencer","Start Now","Andao ary e")}
                  </Link>
@@ -311,7 +314,7 @@ function Landingpage() {
       </motion.nav>
     </header>
 
-    <main className='mt-20'>
+    <main className='xs:-mt-10 md:mt-20 space-y-30 p-5'>
       {/* Section Acceuil */}
       <section id='#Acceuil' className={`${darkMode ? "bg-gray-100" : "bg-black"
       }relative w-full overflow-hidden  min-h-screen`}>
@@ -319,8 +322,8 @@ function Landingpage() {
       <div className="absolute inset-0 bg-[url('/noise-texture.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
 
       {/* Decorative elements */}
-      <div className={`${darkMode ? "opacity-30" : "opacity-20"} absolute -left-20 top-40 w-80 h-80 bg-emerald-500 rotate-12  blur-xl rounded-full`}></div>
-      <div className={`${darkMode ? "opacity-30" : "opacity-10"} absolute right-0 bottom-0 w-96 h-96 bg-purple-600 opacity-20 blur-xl rounded-full`}></div>
+      <div className={`${darkMode ? "opacity-30" : "opacity-20"} absolute -left-20 top-40 w-80 h-80 bg-orange-500 rotate-12  blur-xl rounded-full`}></div>
+      <div className={`${darkMode ? "opacity-30" : "opacity-10"} absolute right-0 bottom-0 w-96 h-96 bg-red-500 opacity-20 blur-xl rounded-full`}></div>
 
       {/* Diagonal lines */}
       <div className="absolute top-10 left-10 w-20 h-20 border-t-2 border-l-2 border-white/30"></div>
@@ -330,7 +333,7 @@ function Landingpage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-10 mb-8 md:mb-16">
             <p
-              className={`text-4xl md:text-6xl ${ darkMode? "text-balck" : "text-white" } font-bold tracking-tighter transition-all duration-700 ${animateText ? "translate-x-0 opacity-100" : "-translate-x-20 opacity-0"}`}
+              className={`text-4xl md:text-7xl ${ darkMode? "text-balck" : "text-white" } font-bold tracking-tighter transition-all duration-700 ${animateText ? "translate-x-0 opacity-100" : "-translate-x-20 opacity-0"}`}
               style={{ fontFamily: "Roboto" }}
             >
               {Traduction("C'est l'heure", "Time to go", "Fotoanany izao")}
@@ -350,15 +353,15 @@ function Landingpage() {
             </div>
 
             <p
-              className={`text-4xl md:text-6xl font-bold  ${ darkMode? "text-balck" : "text-white" } tracking-tighter transition-all duration-700 delay-300 ${animateText ? "translate-x-0 opacity-100" : "translate-x-20 opacity-0"}`}
+              className={`text-4xl md:text-7xl font-bold  ${ darkMode? "text-balck" : "text-white" } tracking-tighter transition-all duration-700 delay-300 ${animateText ? "translate-x-0 opacity-100" : "translate-x-20 opacity-0"}`}
               style={{ fontFamily: "Roboto" }}
             >
               {Traduction("Claque ta page,", "Slam your page,", "Dondòny ny pejinao,")}
             </p>
           </div>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-10">
+          <div className="flex flex-col md:flex-row items-center justify-around gap-4 ">
             <p
-              className={`text-4xl md:text-5xl  ${ darkMode? "text-balck" : "text-white" } font-bold tracking-tighter transition-all duration-700 delay-500 ${animateText ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
+              className={`text-4xl md:text-7xl  ${ darkMode? "text-balck" : "text-white" } font-bold tracking-tighter transition-all duration-700 delay-500 ${animateText ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
               style={{ fontFamily: "Roboto" }}
             >
               {Traduction("Tu pars avec", "Leaving with", "Hiala miaraka")}
@@ -369,7 +372,7 @@ function Landingpage() {
                 <Sparkles className="w-12 h-12 text-yellow-300 animate-pulse" />
               </span>
               <p
-                className={`text-4xl md:text-5xl   ${ darkMode? "text-balck" : "text-white" } font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-yellow-500 transition-all duration-700 delay-700 ${animateText ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
+                className={`text-4xl xs:text-center md:text-6xl   font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-yellow-500 transition-all duration-700 delay-700 ${animateText ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"}`}
                 style={{ fontFamily: "Roboto" }}
               >
                 {Traduction("Des adieux ou Des larmes ?", "Farewells or Tears ?", "Veloma na ranomaso ?")}
@@ -388,27 +391,38 @@ function Landingpage() {
             </div>
           </div>
           <div className="mt-16 flex justify-center">
-            <button className="group relative px-8 py-4 bg-white text-black font-bold text-xl rounded-full overflow-hidden transition-all duration-300 hover:bg-black hover:text-black hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+            <button className="group relative px-8 py-4 bg-white text-black font-bold xs:text-md md:text-xl rounded-full overflow-hidden transition-all duration-300 hover:bg-black hover:text-black hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]">
             <span className="relative z-10 flex items-center gap-2">
               {
                 Traduction("CRÉE TA PAGE DE FIN", "CREATE THE END PAGE","FORONO ARY NY PEJY")
               }
               <ArrowUpRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
             </span>
-            <span className="absolute bottom-0 left-0 w-full h-0 bg-gradient-to-r from-[#EDDD53] to-[#57C785] transition-all duration-300 group-hover:h-full -z-0"></span>
+            <span className="absolute bottom-0 left-0 w-full h-0  bg-gradient-to-r from-red-500 to-yellow-500 transition-all duration-300 group-hover:h-full -z-0"></span>
           </button>
           </div>
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-r from-emerald-500 to-purple-600 transform -skew-y-3 translate-y-10"></div>
+      <div className="absolute xs:hidden md:block bottom-0 left-0 w-full h-20  bg-gradient-to-r from-red-700 to-yellow-700 transform -skew-y-3 translate-y-10"></div>
     </section>
       {/* Section Acceuil */}
 
-       {/* Section Fonctionnaleté */}
-      <section>
-              
+       {/* Section Fonctionnalité */}
+      <section id="Fonctionnalité">
+              <Dashboard language={language} darkMode={darkMode}/>
       </section>
        {/* Section Acceuil */}
+
+       {/* Section Partenariat */}
+      <section id="Partenariat">
+              <Partenariat language={language} darkMode={darkMode}/>
+      </section>
+
+
+      <section id="Conctact">
+
+      </section>
+       {/* Section Partenariat */}
     </main>
        
     </div>
