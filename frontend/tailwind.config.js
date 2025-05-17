@@ -8,12 +8,8 @@ export default {
     extend: {
       colors :
       {
-        jaune: '#F7B603',
-        rouge: '#EB4468',
         blanc : "#F5F7F8",
-        noir :  "#212121",
-        beige: '#FAF3E0',
-        marron : "#4A2C2A"
+        noir :  "#131313",
       },
       screens: {
   			xs: '320px'

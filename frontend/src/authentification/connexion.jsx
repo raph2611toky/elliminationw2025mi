@@ -7,17 +7,15 @@ import axios from "axios"
 import { api } from "../hooks/api"
 
 
-export default function Inscription() {
+export default function Connexion() {
   // États
   const [darkMode, setDarkMode] = useState(true)
   const [language, setLanguage] = useState("fr")
   const [showPassword, setShowPassword] = useState(false)
   const [langMenuOpen, setLangMenuOpen] = useState(false)
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
-    gender: "MASCULIN",
   })
 
   const [errors, setErrors] = useState({})
@@ -78,17 +76,6 @@ export default function Inscription() {
   const validateForm = () => {
     const newErrors = {}
 
-    // Validation du pseudo
-    if (!formData.name.trim()) {
-      newErrors.name = Traduction("Le pseudo est requis", "Username is required", "Ilaina ny anarana famantarana")
-    } else if (formData.name.length < 3) {
-      newErrors.name = Traduction(
-        "Le nom doit contenir au moins 3 caractères",
-        "name must be at least 3 characters",
-        "Ny anarana dia tokony ahitana litera 3 farafahakeliny"
-      )
-    }
-
     // Validation de l'email
     if (!formData.email.trim()) {
       newErrors.email = Traduction("L'email est requis", "Email is required", "Ilaina ny mailaka")
@@ -132,9 +119,9 @@ export default function Inscription() {
 
       // Simuler une requête API
 
-      axios.post(`${api}/register/`,{email:formData.email, name:formData.name, password:formData.password, sexe:formData.gender})
+      axios.post(`${api}/login/`,{email:formData.email, password:formData.password})
       .then(res=>{
-        console.log(res.data)
+        localStorage.setItem(res.data.name,res.data.access)
          setIsSubmitting(false)
         setIsSuccess(true)
         // Réinitialiser le succès après 3 secondes
@@ -340,59 +327,16 @@ export default function Inscription() {
                 style={{fontFamily:"poppins"}}
               >
                 {Traduction(
-                  "Un compte, un gif, un goodbye. C’est ça, la vraie liberté.",
-                  "One account. One gif. One goodbye. That’s real freedom.",
-                  "Kaonty iray. Gif iray. Veloma iray. Izay no tena fahafahana"
+                  "C’est ici que tout se termine. Et ça commence par un login",
+                  "This is where it all ends. And it starts with a login.",
+                  "Eto no iafarany. Ary manomboka amin'ny fidirana."
                 )}
               </motion.p>
             </div>
 
             {/* Formulaire */}
             <form onSubmit={handleSubmit}className="space-y-6">
-              {/* Champ Pseudo */}
-              <div className="">
-                <label
-                  htmlFor="name"
-                  className={`block text-sm font-medium mb-2 ${darkMode ? "text-noir" : "text-blanc"}`}
-                >
-                  {Traduction("Nom", "Name", "Anarana")}
-                </label>
-                <div className="relative">
-                  <div
-                    className={`absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none ${
-                      darkMode ? "text-amber-400" : "text-amber-700"
-                    }`}
-                  >
-                    <User size={18}  color="orange"/>
-                  </div>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className={`pl-10 w-full px-4 py-2 rounded-lg ${
-                      darkMode
-                        ? "bg-white placeholder:text-noir"
-                        : "bg-black placeholder:text-blanc"
-                    } border focus:outline-none focus:ring-2 ${
-                      darkMode ? "focus:ring-orange-500/50" : "focus:ring-orange-700/50"
-                    } ${errors.name ? (darkMode ? "border-red-500" : "border-red-500") : ""}`}
-                    placeholder={Traduction("Votre nom", "Your name", "Ny anaranao")}
-                  />
-                  {errors.name && (
-                    <motion.p
-                      className="mt-1 text-sm text-red-500 flex items-center"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                    >
-                      <AlertCircle size={14} className="mr-1" />
-                      {errors.name}
-                    </motion.p>
-                  )}
-                </div>
-              </div>
-
+             
               {/* Champ Email */}
               <div className="">
                 <label
@@ -490,48 +434,6 @@ export default function Inscription() {
                 </div>
               </div>
 
-              {/* Champ Sexe */}
-              <div className="">
-                <label
-                  htmlFor="gender"
-                  className={`block text-sm font-medium mb-2 ${darkMode ? "text-noir" : "text-blanc"}`}
-                >
-                  {Traduction("Sexe", "Gender", "Lahy sa vavy")}
-                </label>
-                <div className="flex space-x-4">
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="MASCULIN"
-                      checked={formData.gender === "MASCULIN"}
-                      onChange={handleChange}
-                      className={`mr-2 ${
-                        darkMode ? "text-amber-500 border-slate-600" : "text-amber-700 border-amber-200"
-                      }`}
-                    />
-                    <span className={darkMode ? "text-noir" : "text-blanc"}>
-                      {Traduction("Homme", "Male", "Lahy")}
-                    </span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="FEMININ"
-                      checked={formData.gender === "FEMININ"}
-                      onChange={handleChange}
-                      className={`mr-2 ${
-                        darkMode ? "text-amber-500 border-slate-600" : "text-amber-700 border-amber-200"
-                      }`}
-                    />
-                    <span className={darkMode ? "text-noir" : "text-blanc"}>
-                      {Traduction("Femme", "Female", "Vavy")}
-                    </span>
-                  </label>
-                </div>
-              </div>
-
               {/* reCAPTCHA */}
               <div className="flex justify-center items-center">
                 <div
@@ -581,10 +483,10 @@ export default function Inscription() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       ></path>
                     </svg>
-                    {Traduction("Inscription en cours...", "Signing up...", "Fanoratana anarana...")}
+                    {Traduction("Connexion en cours...", "Sign ig...", "fidirana...")}
                   </div>
                 ) : (
-                  Traduction("S'inscrire", "Sign Up", "Hisoratra anarana")
+                  Traduction("Connexion", "Sign In", "Hiditra")
                 )}
               </motion.button>
 
@@ -615,14 +517,14 @@ export default function Inscription() {
             {/* Lien de connexion */}
             <div className="mt-6 text-center">
               <p className={darkMode ? "text-noir" : "text-blanc"}>
-                {Traduction("Avez-vous déjà un compte ?", "Already have an account?", "Efa manana kaonty?")}
+               {Traduction("Vous n'avez pas de compte ?", "You have any account ?", "Tsy manana kaonty?")}
                 <Link
-                  to="/connexion"
+                  to="/inscription"
                   className={`ml-1 font-medium ${
                     darkMode ? "text-orange-400 hover:text-amber-300" : "text-orange-700 hover:text-amber-600"
                   }`}
                 >
-                  {Traduction("Se connecter", "Log in", "Hiditra")}
+                  {Traduction("S'inscricre", "Sign in", "Hisoratra")}
                 </Link>
               </p>
             </div>

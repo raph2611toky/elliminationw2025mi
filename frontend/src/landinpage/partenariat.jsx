@@ -95,7 +95,7 @@ function Partenariat(language,darkMode) {
                                 {Traduction(
                                 "Grâce à vous, même les adieux ont du style.",
                                 "Thanks to you, even goodbyes have style.",
-                                "Misaotra anao, na ny veloma aza dia mba niavaka kely.",
+                                "Misaotra anareo na ny veloma aza dia mba niavaka kely.",
                                 )}
                             </motion.p>
 
@@ -211,7 +211,7 @@ function Partenariat(language,darkMode) {
 
                                 <div className="flex flex-col">
                                     <span className="text-white text-xl font-semibold">{item.text}</span>
-                                    <span className="text-gray-400 text-sm">Feature {item.id}</span>
+                                    <span className="text-gray-400 text-sm">Partenaire {item.id}</span>
                                 </div>
                                 </motion.div>
                             ))}

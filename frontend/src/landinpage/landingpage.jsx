@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion';
-import {  Moon, Sun, Globe,Sparkles,ArrowUpRight } from "lucide-react"
+import {  Moon, Sun, Globe,Sparkles,ArrowUpRight, DoorOpen } from "lucide-react"
 import { Link } from 'react-router-dom'; 
 import "./landingpage.css"
 import Dashboard from './dashboard';
 import Partenariat from './partenariat';
+import Footer from './footer';
 function Landingpage() {
     const [darkMode, setDarkMode] = useState(true)
     const [language, setLanguage] = useState("fr")
@@ -82,19 +83,19 @@ function Landingpage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Fond de la navbar avec effet parchemin */}
         <div className="relative">
           <div className="relative z-10">
             <div className="flex justify-between  items-center py-3 px-20">
               {/* Logo */}
               <motion.h1
                 href="#"
-                className={`text-2xl md:text-3xl  ${darkMode ? "text-black" : "text-white"}`}
+                className={`text-2xl md:text-3xl  ${darkMode ? "text-black" : "text-white"} flex flex-row items-center`}
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: "spring", stiffness: 300 }}
                 style={{fontFamily:"Cormorant",fontWeight:"700",fontStyle:"italic"}}
               >
-                {Traduction("ExitBang", "ExitBang", "ExitBang")}
+                 <DoorOpen className="h-8 w-8 text-red-500 mr-2" />
+                {Traduction("EndPage", "EndPage", "EndPage")}
               </motion.h1>
 
               {/* Desktop Menu */}
@@ -167,8 +168,8 @@ function Landingpage() {
                     </motion.div>
                   )}
                 </div>
-                {/* Bouton de changement de mode */}
 
+                {/* Bouton de changement de mode */}
                 <button
                   onClick={() => setDarkMode(!darkMode)}
                   className={`ml-2 p-2 rounded-full  transition-colors duration-200`}
@@ -179,11 +180,13 @@ function Landingpage() {
                 <motion.button
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   whileTap={{ scale: 0.9 }}  className={` bg-gradient-to-r from-red-600 to-yellow-600  flex flex-1 text-xl px-5 rounded-xl py-2 text-black font-semibold duration-200`} style={{fontFamily:"Poppins"}}>
+                 <Link to="/inscription"> 
                   {Traduction("Commencer","Start Now","Andao ary e")}
+                 </Link>
               </motion.button>
               </div>
               
-              </div>
+            </div>
 
               {/* Mobile Menu Button */}
               <div className="md:hidden flex items-center">
@@ -304,7 +307,7 @@ function Landingpage() {
               <motion.button
                   whileHover={{ scale: 1.1, rotate: 5 }}
                   whileTap={{ scale: 0.9 }}  className={`bg-gradient-to-r from-red-700 to-yellow-700  flex flex-1 text-xl px-5 rounded-xl py-2 text-black font-semibold duration-200`} style={{fontFamily:"Poppins"}}>
-                 <Link to="#"> 
+                 <Link to="/inscription"> 
                   {Traduction("Commencer","Start Now","Andao ary e")}
                  </Link>
               </motion.button>
@@ -314,9 +317,9 @@ function Landingpage() {
       </motion.nav>
     </header>
 
-    <main className='xs:-mt-10 md:mt-20 space-y-30 p-5'>
+    <main className='xs:-mt-10 md:mt-20 space-y-40 p-5'>
       {/* Section Acceuil */}
-      <section id='#Acceuil' className={`${darkMode ? "bg-gray-100" : "bg-black"
+      <section id='Acceuil' className={`${darkMode ? "bg-gray-100" : "bg-black"
       }relative w-full overflow-hidden  min-h-screen`}>
       {/* Texture overlay */}
       <div className="absolute inset-0 bg-[url('/noise-texture.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
@@ -418,13 +421,11 @@ function Landingpage() {
               <Partenariat language={language} darkMode={darkMode}/>
       </section>
 
-
-      <section id="Conctact">
-
-      </section>
        {/* Section Partenariat */}
     </main>
-       
+       <section id='Contact' className='mt-20'>
+                 <Footer/>
+       </section>
     </div>
   )
 }
