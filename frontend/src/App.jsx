@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import Landingpage from './landinpage/landingpage'
 import Inscription from './authentification/inscription'
 import Connexion from './authentification/connexion'
-import { languageContext, darkModeContext } from './hooks/context'
+import ChatBotTheEnd from './finalBot/finalBoth'
 function App() {
   
   return(<>
@@ -10,6 +10,7 @@ function App() {
             <Route path ="/"  element={<Landingpage/>}/>
             <Route path ="/inscription"  element={<Inscription/>}/>
             <Route path='/connexion' element={<Connexion/>}/>
+            <Route path='/home/finalBot' element={<ChatBotTheEnd/>}/>
    </Routes>  
   </>)
 }
