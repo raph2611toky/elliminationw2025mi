@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
-import Landingpage from './component/landingpage'
+import Landingpage from './landinpage/landingpage'
 import HallDesFins from './hallDesFins/hallDesFins'
 function App() {
   
