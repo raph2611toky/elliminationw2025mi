@@ -201,7 +201,7 @@ export default function Dashboard({ language, darkMode }) {
     };
   }, [controls]);
 
-  const Traduction = (francais, anglais, malagasy) => {
+  const Traduction = (francais :string, anglais:string, malagasy:string) => {
     switch (language) {
       case "fr":
         return francais;
@@ -416,7 +416,7 @@ export default function Dashboard({ language, darkMode }) {
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
               <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-2">
                 {Traduction("Foncti", "Functi", "Zava-")}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-400">
                   {Traduction("onnalité", "onality", "misy")}
                 </span>
               </h1>

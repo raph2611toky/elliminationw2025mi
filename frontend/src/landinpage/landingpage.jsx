@@ -6,6 +6,8 @@ import "./landingpage.css"
 import Dashboard from './dashboard';
 import Partenariat from './partenariat';
 import Footer from './footer';
+
+import TestimonialsSection from './temoignage';
 function Landingpage() {
     const [darkMode, setDarkMode] = useState(true)
     const [language, setLanguage] = useState("fr")
@@ -54,7 +56,10 @@ function Landingpage() {
       name: Traduction("Fonctionalité", "Functionality", "Zava-misy"),
       href: "#Fonctionnalité",
     },
-    
+     {
+      name: Traduction("Temoignage", "Testimony", "Vavolombelona"),
+      href: "#Temoignage",
+    },
      {
       name: Traduction("Partenariat", "Partnership", "Mpiara-miasa"),
       href: "#Partenariat",
@@ -406,22 +411,28 @@ function Landingpage() {
           </div>
         </div>
       </div>
-      <div className="absolute xs:hidden md:block bottom-0 left-0 w-full h-20  bg-gradient-to-r from-red-700 to-yellow-700 transform -skew-y-3 translate-y-10"></div>
+      <div className="absolute xs:hidden md:block bottom-0 left-0 w-full h-5  bg-gradient-to-r from-red-700 to-yellow-700 transform -skew-y-3 translate-y-10"></div>
     </section>
       {/* Section Acceuil */}
 
        {/* Section Fonctionnalité */}
       <section id="Fonctionnalité">
-              <Dashboard language={language} darkMode={darkMode}/>
+            <Dashboard language={language} darkMode={darkMode}/>
       </section>
-       {/* Section Acceuil */}
+       {/* Section Fonctionnalité */}
+
+        {/* Section Témoignage */}
+       <section id='Temoignage'>
+         <TestimonialsSection language={language} darkMode={darkMode}/>
+       </section>
+       {/* Section Témoignage */}
 
        {/* Section Partenariat */}
       <section id="Partenariat">
               <Partenariat language={language} darkMode={darkMode}/>
       </section>
 
-       {/* Section Partenariat */}
+    {/* Section Partenariat */}
     </main>
        <section id='Contact' className='mt-20'>
                  <Footer/>
