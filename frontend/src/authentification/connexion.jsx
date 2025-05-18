@@ -5,7 +5,7 @@ import { User, Lock, Mail, Eye, EyeOff, Sun, Moon, Globe, Flame, DoorOpen, Chevr
 import { Link } from "react-router-dom"
 import axios from "axios"
 import { api } from "../hooks/api"
-
+import { useNavigate } from "react-router-dom"
 
 export default function Connexion() {
   // États
@@ -17,6 +17,7 @@ export default function Connexion() {
     email: "",
     password: "",
   })
+  const navigation = useNavigate()
 
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -90,7 +91,7 @@ export default function Connexion() {
     // Validation du mot de passe
     if (!formData.password) {
       newErrors.password = Traduction("Le mot de passe est requis", "Password is required", "Ilaina ny tenimiafina")
-    } else if (formData.password.length < 8) {
+    } else if (formData.password.length < 3) {
       newErrors.password = Traduction(
         "Le mot de passe doit contenir au moins 8 caractères",
         "Password must be at least 6 characters",
@@ -117,11 +118,13 @@ export default function Connexion() {
     if (validateForm()) {
       setIsSubmitting(true)
 
-      // Simuler une requête API
+      
 
       axios.post(`${api}/login/`,{email:formData.email, password:formData.password})
       .then(res=>{
-        localStorage.setItem(res.data.name,res.data.access)
+        localStorage.setItem('token',res.data.access)
+        console.log(localStorage.getItem('token'))
+         useNavigate("./hall")
          setIsSubmitting(false)
         setIsSuccess(true)
         // Réinitialiser le succès après 3 secondes
