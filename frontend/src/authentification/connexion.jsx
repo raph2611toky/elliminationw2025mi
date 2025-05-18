@@ -5,7 +5,7 @@ import { User, Lock, Mail, Eye, EyeOff, Sun, Moon, Globe, Flame, DoorOpen, Chevr
 import { Link, redirect } from "react-router-dom"
 import axios from "axios"
 import { api } from "../hooks/api"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"import { useNavigate } from "react-router-dom"
 
 export default function Connexion() {
   // États
@@ -123,7 +123,9 @@ export default function Connexion() {
       axios.post(`${api}/login/`,{email:formData.email, password:formData.password})
       .then(res=>{
         localStorage.setItem('token',res.data.access)
-        setIsSubmitting(false)
+        console.log(localStorage.getItem('token'))
+         useNavigate("./hall")
+         setIsSubmitting(false)
         setIsSuccess(true)
         // Réinitialiser le succès après 3 secondes
          setTimeout(() => {
