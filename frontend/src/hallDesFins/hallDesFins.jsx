@@ -1,4 +1,5 @@
 "use client"
+import axios from "axios"
 import { api } from "../hooks/api"
 import React, { useState, useEffect, useRef, Suspense } from "react"
 import "./HallDesFins.css"
@@ -28,7 +29,11 @@ const Ecrire = React.lazy(() => import("../ecrireMaFin/ecrireMaFin"))
 const ApresFin = React.lazy(() => import("../apresFin/apresFin"))
 const DernierFin = React.lazy(() => import("../DernierFin/DernierFin"))
 
-// Données mockées
+
+  
+
+ 
+
 const mockPages = [
   {
     id: 1,
@@ -132,8 +137,8 @@ const HallDesFins = () => {
   // États
   const [language, setLanguage] = useState("fr")
   const [darkMode, setDarkMode] = useState(false)
-  const [pages, setPages] = useState(mockPages)
-  const [filteredPages, setFilteredPages] = useState(mockPages)
+  const [pages, setPages] = useState([])
+  const [filteredPages, setFilteredPages] = useState([])
   const [emotionFilter, setEmotionFilter] = useState("tous")
   const [typeFilter, setTypeFilter] = useState("tous")
   const [sortBy, setSortBy] = useState("recent")
@@ -164,7 +169,30 @@ const HallDesFins = () => {
   const starsRef = useRef(null)
   const portalRef = useRef(null)
   const engravingRef = useRef(null)
-
+  const [publications, setPublications] = useState([]);
+   useEffect(() => {
+    axios.get('https://backend.ikomtoky.madagascar.webcup.hodi.host/api/endpage/')
+      .then(response => {
+       
+        setFilteredPages(response.data);
+        setPages(response.data);
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération des publications:', error);
+      });
+  }, []);
+   useEffect(() => {
+    axios.get('https://backend.ikomtoky.madagascar.webcup.hodi.host/api/top-total-reactions/')
+      .then(response => {
+        setPublications(response.data);
+       
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération des publications:', error);
+      });
+  }, []);
   // Animation initiale
   useEffect(() => {
     // Commencer avec le portail fermé
@@ -454,25 +482,25 @@ const HallDesFins = () => {
 
     // Appliquer le tri
     if (sortBy === "recent") {
-      result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+     setFilteredPages(publications)
     } else if (sortBy === "popular") {
       result.sort((a, b) => b.likes - a.likes)
     }
 
-    setFilteredPages(result)
+    setFilteredPages(publications)
   }, [emotionFilter, typeFilter, sortBy, pages, searchQuery])
 
   // Obtenir le libellé d'émotion
   const getEmotionLabel = (emotion) => {
     switch (emotion) {
-      case "humour":
-        return t.humor
-      case "tristesse":
-        return t.sadness
-      case "rage":
-        return t.rage
-      case "nostalgie":
-        return t.nostalgia
+      case "colère":
+        return t.colère
+      case "triste":
+        return t.triste
+      case "joie":
+        return t.joie
+      case "surpris":
+        return t.surpris
       default:
         return emotion
     }
@@ -506,8 +534,8 @@ const HallDesFins = () => {
       }
     })
   }
-
-  // Obtenir le nombre de réactions (simulé)
+  
+  
   const getReactionCount = (pageId, reactionType) => {
     // Nombres de base
     const baseCounts = {
@@ -576,15 +604,6 @@ const HallDesFins = () => {
     openPageDetail(previewPage)
     setTestMenuVisible(false)
   }
-
-  // Gérer la fin du quiz
-  const handleQuizComplete = (result) => {
-    setQuizResult(result)
-    // Rediriger vers la section d'écriture
-    setActiveSection("write")
-    window.location.hash = "write"
-  }
-
   // Rendu conditionnel en fonction de la section active
   const renderContent = () => {
     switch (activeSection) {
@@ -612,10 +631,10 @@ const HallDesFins = () => {
                       aria-label="Filter by emotion"
                     >
                       <option value="tous">{t.all}</option>
-                      <option value="humour">{t.humor}</option>
-                      <option value="tristesse">{t.sadness}</option>
-                      <option value="rage">{t.rage}</option>
-                      <option value="nostalgie">{t.nostalgia}</option>
+                      <option value="colère">colère</option>
+                      <option value="triste">triste</option>
+                      <option value="rage">rage</option>
+                      <option value="surpris">surpris</option>
                     </select>
                     <ChevronDown className="select-icon" />
                   </div>
@@ -630,9 +649,9 @@ const HallDesFins = () => {
                       aria-label="Filter by type"
                     >
                       <option value="tous">{t.all}</option>
-                      <option value="démission">{t.resignation}</option>
-                      <option value="rupture">{t.breakup}</option>
-                      <option value="départ">{t.departure}</option>
+                      <option value="démission">démission</option>
+                      <option value="rupture">rupture</option>
+                      <option value="départ">départ</option>
                     </select>
                     <ChevronDown className="select-icon" />
                   </div>
@@ -642,8 +661,8 @@ const HallDesFins = () => {
                   <label>{t.sortBy}</label>
                   <div className="select-wrapper">
                     <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} aria-label="Sort by">
-                      <option value="recent">{t.recent}</option>
-                      <option value="popular">{t.popular}</option>
+                      <option value="recent">top</option>
+                      <option value="popular">tous</option>
                     </select>
                     <ChevronDown className="select-icon" />
                   </div>
@@ -683,7 +702,8 @@ const HallDesFins = () => {
                       </div>
                       <div className="card-content">
                         <div className="card-meta">
-                          <span className={`badge small emotion ${page.emotion}`}>{getEmotionLabel(page.emotion)}</span>
+                          <span className={`badge small emotion ${page.emotion}`}>{getEmotionLabel(page.expression
+)}</span>
                           <span className="badge small type">{getTypeLabel(page.type)}</span>
                         </div>
                         <h3>{page.title}</h3>

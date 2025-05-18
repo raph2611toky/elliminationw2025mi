@@ -80,7 +80,7 @@ const DernierFin = () => {
   if (token){
   await axios.post(
     `${API_URL}/quizzes/soummettre/`, {quizz_id : quizzId,
-    response_par_question: payload.reponses_par_questions},
+    reponses_par_questions: payload.reponses_par_questions},
     {
       headers: {
         Authorization: `Bearer ${token}`

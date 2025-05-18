@@ -36,7 +36,7 @@
 }
 
 .quiz-subtitle {
-  font-size: 14px;
+  font-size: 13px;
   font-style: italic;
   opacity: 0.75;
   color: #555;
@@ -94,7 +94,7 @@
   border: 1px solid var(--light-border);
   border-radius: 6px;
   text-align: left;
-  font-size: 14px;
+  font-size: 13px;
   transition: all 0.3s ease;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
