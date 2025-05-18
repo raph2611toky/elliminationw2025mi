@@ -93,46 +93,51 @@ const Interface = () => {
         </div>
       </motion.div>
 
-      {/* Mode Selection (Bottom Center) */}
       <motion.div
-        className="fixed inset-x-0 bottom-5 z-50 flex justify-center space-x-4 p-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: animateElements ? 1 : 0, y: animateElements ? 0 : 20 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-      >
-        <motion.button
-          onClick={() => setCharacterMode('PRO')}
-          className={`py-2 px-4 rounded-xl font-medium bg-gradient-to-r from-green-400 to-blue-500 text-white ${characterMode === 'PRO' ? 'ring-2 ring-offset-2 ring-green-300' : ''}`}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          PRO
-        </motion.button>
-        <motion.button
-          onClick={() => setCharacterMode('RELAX')}
-          className={`py-2 px-4 rounded-xl font-medium bg-gradient-to-r from-purple-400 to-pink-500 text-white ${characterMode === 'RELAX' ? 'ring-2 ring-offset-2 ring-purple-300' : ''}`}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          RELAX
-        </motion.button>
-      </motion.div>
+  className="fixed inset-x-0 bottom-5 z-50 flex items-center justify-between px-4"
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: animateElements ? 1 : 0, y: animateElements ? 0 : 20 }}
+  transition={{ duration: 0.5, delay: 0.3 }}
+>
+  {/* Zone gauche vide pour équilibrer */}
+  <div className="w-1/3" />
 
-      {/* Next Button */}
-      <motion.div
-        className="fixed inset-x-0 bottom-16 flex justify-center sm:justify-end z-40"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: animateElements ? 1 : 0, y: animateElements ? 0 : 20 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-      >
-        <motion.button
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          whileTap={{ scale: 0.9 }}
-          className={`bg-gradient-to-r ${colors.accent} text-white font-semibold px-5 py-2 rounded-xl shadow-lg`}
-        >
-          Next
-        </motion.button>
-      </motion.div>
+  {/* Boutons PRO / RELAX centrés */}
+  <div className="w-1/3 flex justify-center space-x-4">
+    <motion.button
+      onClick={() => setCharacterMode('PRO')}
+      className={`py-2 px-4 rounded-xl font-medium bg-gradient-to-r from-green-400 to-blue-500 text-white ${
+        characterMode === 'PRO' ? 'ring-2 ring-offset-2 ring-green-300' : ''
+      }`}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      PRO
+    </motion.button>
+    <motion.button
+      onClick={() => setCharacterMode('RELAX')}
+      className={`py-2 px-4 rounded-xl font-medium bg-gradient-to-r from-purple-400 to-pink-500 text-white ${
+        characterMode === 'RELAX' ? 'ring-2 ring-offset-2 ring-purple-300' : ''
+      }`}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      RELAX
+    </motion.button>
+  </div>
+
+  {/* Bouton Next aligné à droite */}
+  <div className="w-1/3 flex justify-end">
+    <motion.button
+      whileHover={{ scale: 1.1, rotate: 5 }}
+      whileTap={{ scale: 0.9 }}
+      className={`bg-gradient-to-r ${colors.accent} text-white font-semibold px-5 py-2 rounded-xl shadow-lg`}
+    >
+      Next
+    </motion.button>
+  </div>
+</motion.div>
+
     </div>
   )
 }
