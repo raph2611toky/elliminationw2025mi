@@ -14,7 +14,7 @@ function App() {
             <Route path='/connexion' element={<Connexion/>}/>
             <Route path='/home/finalBot' element={<ChatBotTheEnd/>}/>
             <Route path ="/hall"  element={<HallDesFins/>}/> 
-            <Route path ="/mesfin"  element={<Mesfins/>}/> 
+            <Route path ="/mesfins"  element={<Mesfins/>}/> 
    </Routes>  
   </>)
 }

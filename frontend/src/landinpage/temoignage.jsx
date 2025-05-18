@@ -436,7 +436,7 @@ const TestimonialsSection = (language,darkMode) => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <span>Un page page unique</span>
+                <span>Un page  unique</span>
                 <ExternalLink className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
               </motion.p>
 

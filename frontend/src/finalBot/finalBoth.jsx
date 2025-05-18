@@ -1,6 +1,6 @@
-"use client"
-import { useState, useEffect, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+"use client";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Send,
   X,
@@ -17,12 +17,12 @@ import {
   Minimize,
   MessageCircle,
   Sparkles,
-} from "lucide-react"
-import axios from "axios"
-import { api } from "../hooks/api"
+} from "lucide-react";
+import axios from "axios";
+import { api } from "../hooks/api";
 
 export default function ChatBotTheEnd() {
-  const [ouvrir, setOuvrir] = useState(false)
+  const [ouvrir, setOuvrir] = useState(false);
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -30,98 +30,82 @@ export default function ChatBotTheEnd() {
       content:
         "Bienvenue sur TheEnd.page! Je suis là pour vous aider à créer votre page de départ personnalisée. Que souhaitez-vous accomplir aujourd'hui?",
     },
-  ])
+  ]);
 
-  const [inputValue, setInputValue] = useState("")
-  const [titre, setTitre] = useState("")
-  const [isTyping, setIsTyping] = useState(false)
-  const [darkMode, setDarkMode] = useState(true)
-  const [showWelcome, setShowWelcome] = useState(true)
-  const [expanded, setExpanded] = useState(false)
-  const [buttonHovered, setButtonHovered] = useState(false)
-  const [activeEmoji, setActiveEmoji] = useState(null)
-  const messagesEndRef = useRef(null)
-  const [showSuggestions, setShowSuggestions] = useState(true)
- console.log(inputValue,titre)
-  // Suggestions de questions rapides
-  const suggestions = [
-    "Comment personnaliser ma page?",
-    "Quels types de départ sont disponibles?",
-    "Comment ajouter des GIFs à ma page?",
-    "Puis-je utiliser des sons?",
-  ]
+  const [inputValue, setInputValue] = useState("");
+  const [titre, setTitre] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  const [buttonHovered, setButtonHovered] = useState(false);
+  const [activeEmoji, setActiveEmoji] = useState(null);
+  const messagesEndRef = useRef(null);
+  const [showSuggestions, setShowSuggestions] = useState(true);
 
   // Simulating bot typing and response
   const handleSendMessage = (e, content = inputValue.trim()) => {
-  e.preventDefault();
-  if (content === "") return;
+    e.preventDefault();
+    if (content === "") return;
 
-  const newUserMessage = { id: messages.length + 1, type: "user", content: content };
-  setMessages([...messages, newUserMessage]);
-  setInputValue("");
-  setShowSuggestions(false);
+    const newUserMessage = { id: messages.length + 1, type: "user", content: content };
+    setMessages([...messages, newUserMessage]);
+    setInputValue("");
+    setShowSuggestions(false);
 
-  setIsTyping(true);
+    setIsTyping(true);
 
-  const token = localStorage.getItem("token");
-  console.log(token) // Ajustez selon votre gestion d'authentification
-  axios
-    .post(
-      `${api}/conversations/create/`,
-      { message: inputValue, domain: titre },
-      {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      }
-    )
-    .then((res) => {
-      axios.get(`${api}/conversations/`,
-      {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+    const token = localStorage.getItem("token");
+    console.log(token); // Ajustez selon votre gestion d'authentification
+    axios
+      .post(
+        `${api}/conversations/create/`,
+        { message: inputValue, domain: titre },
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      )
+      .then((res) => {
+        axios.get(`${api}/conversations/`)
+        .then(res=>{console.log(res.data)})
       })
-      .then(res=>{console.log(res.data),setIsTyping(false);})
-      .catch(err=>console.log(err))
-    })
-    .catch((err) => {
-      console.log(err.response ? err.response.data : err.message);
-    });
-};
+      .catch((err) => {
+        console.log(err.response ? err.response.data : err.message);
+      });
+  };
+
   // Auto-scroll to bottom of messages
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages, isTyping])
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isTyping]);
 
   // Handle key press for sending message
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      handleSendMessage()
+      handleSendMessage(e); // Pass the event to handleSendMessage
     }
-  }
+  };
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode)
-  }
-
-  const closeWelcome = () => {
-    setShowWelcome(false)
-  }
+    setDarkMode(!darkMode);
+  };
 
   // Fonction pour obtenir l'icône du type de départ
   const getExitTypeIcon = (type) => {
     switch (type) {
       case "job":
-        return <Briefcase className="h-5 w-5" />
+        return <Briefcase className="h-5 w-5" />;
       case "relationship":
-        return <Heart className="h-5 w-5" />
+        return <Heart className="h-5 w-5" />;
       case "project":
-        return <Flame className="h-5 w-5" />
+        return <Flame className="h-5 w-5" />;
       case "team":
-        return <Users className="h-5 w-5" />
+        return <Users className="h-5 w-5" />;
       case "social":
-        return <MessageSquareOff className="h-5 w-5" />
+        return <MessageSquareOff className="h-5 w-5" />;
       default:
-        return <DoorClosed className="h-5 w-5" />
+        return <DoorClosed className="h-5 w-5" />;
     }
-  }
+  };
 
   // Animation pour l'icône du chatbot
   const buttonVariants = {
@@ -137,11 +121,11 @@ export default function ChatBotTheEnd() {
         repeatType: "loop",
       },
     },
-  }
+  };
 
   // Animation pour les particules autour du bouton
   const renderParticles = () => {
-    if (!buttonHovered) return null
+    if (!buttonHovered) return null;
 
     return Array.from({ length: 8 }).map((_, i) => (
       <motion.div
@@ -166,15 +150,15 @@ export default function ChatBotTheEnd() {
           top: "50%",
         }}
       />
-    ))
-  }
+    ));
+  };
 
   // Effet de flamme pour le bouton
   const renderButtonFlame = () => {
-    if (!buttonHovered) return null
+    if (!buttonHovered) return null;
 
     return (
-      <div className="absolute -bottom-2  z-10 left-0 right-0 h-6 overflow-hidden pointer-events-none">
+      <div className="absolute -bottom-2 z-10 left-0 right-0 h-6 overflow-hidden pointer-events-none">
         {Array.from({ length: 10 }).map((_, i) => (
           <motion.div
             key={`flame-${i}`}
@@ -197,8 +181,8 @@ export default function ChatBotTheEnd() {
           />
         ))}
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div
@@ -209,7 +193,7 @@ export default function ChatBotTheEnd() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Chat Bot Interface */}
           <div className="relative h-full">
-            <div className={`fixed top-6 right-6 z-50 ${expanded ? "w-full max-w-md" : ""}`}>
+            <div className={`fixed bottom-6 left-6 z-50 ${expanded ? "w-full max-w-md" : ""}`}>
               <AnimatePresence mode="wait">
                 {!ouvrir ? (
                   <motion.div
@@ -380,7 +364,7 @@ export default function ChatBotTheEnd() {
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                               onClick={() => {
-                                setTitre("CONSEIL")
+                                setTitre("CONSEIL");
                               }}
                               className={`text-xs px-3 py-1.5 rounded-full ${
                                 darkMode
@@ -395,7 +379,7 @@ export default function ChatBotTheEnd() {
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                               onClick={() => {
-                                setTitre("REHABILITATION")
+                                setTitre("REHABILITATION");
                               }}
                               className={`text-xs px-3 py-1.5 rounded-full ${
                                 darkMode
@@ -464,7 +448,6 @@ export default function ChatBotTheEnd() {
                           type="submit"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
-                          onClick={handleSendMessage}
                           className="p-3 rounded-lg bg-gradient-to-r from-red-600 to-yellow-600 text-white transition-all shadow-md shadow-red-500/20 hover:shadow-lg hover:shadow-red-500/30"
                         >
                           <Send size={18} />
@@ -479,5 +462,5 @@ export default function ChatBotTheEnd() {
         </div>
       </div>
     </div>
-  )
+  );
 }

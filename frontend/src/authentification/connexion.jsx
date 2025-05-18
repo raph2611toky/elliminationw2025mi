@@ -145,19 +145,7 @@ if (localStorage.getItem('token'))
   {
           navigation("../hall")
   }
-  // // Fermer le menu de langue si on clique ailleurs
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (langMenuOpen && !event.target.closest(".lang-menu")) {
-  //       setLangMenuOpen(false)
-  //     }
-  //   }
 
-  //   document.addEventListener("mousedown", handleClickOutside)
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside)
-  //   }
-  // }, [langMenuOpen])
 
   // Charger le script reCAPTCHA
   useEffect(() => {
