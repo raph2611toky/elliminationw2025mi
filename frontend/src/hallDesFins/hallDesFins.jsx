@@ -1,6 +1,7 @@
 "use client"
-
-import React, { useState, useEffect, useRef } from "react"
+import axios from "axios"
+import { api } from "../hooks/api"
+import React, React, { useState, useEffect, useRef, Suspense } from "react"
 import "./hallDesFins.css"
 import {
   BookOpen,
@@ -22,10 +23,15 @@ import {
   Zap,
   BrainCircuit,
 } from "lucide-react"
-import ChatBotTheEnd from "../finalBot/finalBoth"
 const Ecrire = React.lazy(() => import("../ecrireMaFin/ecrireMaFin"))
 const ApresFin = React.lazy(() => import("../apresFin/apresFin"))
 const DernierFin = React.lazy(() => import("../DernierFin/DernierFin"))
+
+
+  
+
+ 
+
 const mockPages = [
   {
     id: 1,
@@ -126,10 +132,11 @@ const mockPages = [
 ]
 
 const HallDesFins = () => {
+  // États
   const [language, setLanguage] = useState("fr")
   const [darkMode, setDarkMode] = useState(false)
-  const [pages, setPages] = useState(mockPages)
-  const [filteredPages, setFilteredPages] = useState(mockPages)
+  const [pages, setPages] = useState([])
+  const [filteredPages, setFilteredPages] = useState([])
   const [emotionFilter, setEmotionFilter] = useState("tous")
   const [typeFilter, setTypeFilter] = useState("tous")
   const [sortBy, setSortBy] = useState("recent")
@@ -152,6 +159,7 @@ const HallDesFins = () => {
   const [activeSection, setActiveSection] = useState("hall")
   const [quizResult, setQuizResult] = useState(null)
 
+  // Références
   const cardsRef = useRef([])
   const cursorRef = useRef(null)
   const cursorDotRef = useRef(null)
@@ -159,21 +167,44 @@ const HallDesFins = () => {
   const starsRef = useRef(null)
   const portalRef = useRef(null)
   const engravingRef = useRef(null)
-
-  // Initial animation sequence
+  const [publications, setPublications] = useState([]);
+   useEffect(() => {
+    axios.get('https://backend.ikomtoky.madagascar.webcup.hodi.host/api/endpage/')
+      .then(response => {
+       
+        setFilteredPages(response.data);
+        setPages(response.data);
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération des publications:', error);
+      });
+  }, []);
+   useEffect(() => {
+    axios.get('https://backend.ikomtoky.madagascar.webcup.hodi.host/api/top-total-reactions/')
+      .then(response => {
+        setPublications(response.data);
+       
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération des publications:', error);
+      });
+  }, []);
+  // Animation initiale
   useEffect(() => {
-    // Start with portal closed
+    // Commencer avec le portail fermé
     setTimeout(() => {
       setPortalOpen(true)
 
-      // After portal animation completes
+      // Après la fin de l'animation du portail
       setTimeout(() => {
         setAnimationComplete(true)
       }, 2000)
     }, 500)
   }, [])
 
-  // Custom cursor effect
+  // Effet de curseur personnalisé
   useEffect(() => {
     const cursor = cursorRef.current
     const cursorDot = cursorDotRef.current
@@ -184,11 +215,11 @@ const HallDesFins = () => {
     const onMouseMove = (e) => {
       const { clientX, clientY } = e
 
-      // Position the cursor elements
+      // Positionner les éléments du curseur
       cursor.style.left = `${clientX}px`
       cursor.style.top = `${clientY}px`
 
-      // The dot follows with a slight delay for a trailing effect
+      // Le point suit avec un léger délai pour un effet de traînée
       setTimeout(() => {
         cursorDot.style.left = `${clientX}px`
         cursorDot.style.top = `${clientY}px`
@@ -205,7 +236,7 @@ const HallDesFins = () => {
       cursorDot.style.opacity = "0"
     }
 
-    // Add hover effect for interactive elements
+    // Ajouter un effet de survol pour les éléments interactifs
     const handleLinkHover = () => {
       cursor.classList.add("cursor-hover")
     }
@@ -214,12 +245,12 @@ const HallDesFins = () => {
       cursor.classList.remove("cursor-hover")
     }
 
-    // Add event listeners
+    // Ajouter les écouteurs d'événements
     container.addEventListener("mousemove", onMouseMove)
     container.addEventListener("mouseenter", onMouseEnter)
     container.addEventListener("mouseleave", onMouseLeave)
 
-    // Add hover effect to all interactive elements
+    // Ajouter l'effet de survol à tous les éléments interactifs
     const interactiveElements = container.querySelectorAll("a, button, .page-card, .card-reaction, select")
     interactiveElements.forEach((el) => {
       el.addEventListener("mouseenter", handleLinkHover)
@@ -238,7 +269,7 @@ const HallDesFins = () => {
     }
   }, [filteredPages, activeSection])
 
-  // Parallax stars effect
+  // Effet de parallaxe pour les étoiles
   useEffect(() => {
     const stars = starsRef.current
     if (!stars) return
@@ -258,7 +289,7 @@ const HallDesFins = () => {
     }
   }, [])
 
-  // Card animation on scroll
+  // Animation des cartes au défilement
   useEffect(() => {
     const handleScroll = () => {
       cardsRef.current.forEach((card) => {
@@ -272,18 +303,19 @@ const HallDesFins = () => {
     }
 
     window.addEventListener("scroll", handleScroll)
-    handleScroll() // Trigger once on load
+    handleScroll() // Déclencher une fois au chargement
 
     return () => {
       window.removeEventListener("scroll", handleScroll)
     }
   }, [filteredPages])
 
-  // Dark mode effect
+  // Effet du mode sombre
   useEffect(() => {
     document.body.className = darkMode ? "dark-mode" : "light-mode"
   }, [darkMode])
 
+  // Effet de gravure au mouvement de la souris
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
@@ -334,7 +366,7 @@ const HallDesFins = () => {
     }
   }, [])
 
-  // Translations
+  // Traductions
   const translations = {
     fr: {
       pageOfDay: "Page du jour",
@@ -402,7 +434,7 @@ const HallDesFins = () => {
         myEnds: "Profil",
       },
       footer: "Zo rehetra voatokana",
-      galleryTitle: "Ny Tranon'ny Fiafaran",
+      galleryTitle: "Ny Tranon'ny Fiafarana",
       gallerySubtitle: "Jereo ny pejy noforonina",
       galleryDescription: "Galeria mampiseho ny fiafaran'ny tantara rehetra",
       search: "Hikaroka...",
@@ -424,21 +456,21 @@ const HallDesFins = () => {
 
   const t = translations[language]
 
-  // Filter and search effect
+  // Filtrage et recherche
   useEffect(() => {
     let result = [...pages]
 
-    // Apply emotion filter
+    // Appliquer le filtre d'émotion
     if (emotionFilter !== "tous") {
       result = result.filter((page) => page.emotion === emotionFilter)
     }
 
-    // Apply type filter
+    // Appliquer le filtre de type
     if (typeFilter !== "tous") {
       result = result.filter((page) => page.type === typeFilter)
     }
 
-    // Apply search query
+    // Appliquer la recherche
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase()
       result = result.filter(
@@ -446,33 +478,33 @@ const HallDesFins = () => {
       )
     }
 
-    // Apply sorting
+    // Appliquer le tri
     if (sortBy === "recent") {
-      result.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+     setFilteredPages(publications)
     } else if (sortBy === "popular") {
       result.sort((a, b) => b.likes - a.likes)
     }
 
-    setFilteredPages(result)
+    setFilteredPages(publications)
   }, [emotionFilter, typeFilter, sortBy, pages, searchQuery])
 
-  // Get emotion label
+  // Obtenir le libellé d'émotion
   const getEmotionLabel = (emotion) => {
     switch (emotion) {
-      case "humour":
-        return t.humor
-      case "tristesse":
-        return t.sadness
-      case "rage":
-        return t.rage
-      case "nostalgie":
-        return t.nostalgia
+      case "colère":
+        return t.colère
+      case "triste":
+        return t.triste
+      case "joie":
+        return t.joie
+      case "surpris":
+        return t.surpris
       default:
         return emotion
     }
   }
 
-  // Get type label
+  // Obtenir le libellé de type
   const getTypeLabel = (type) => {
     switch (type) {
       case "démission":
@@ -486,8 +518,9 @@ const HallDesFins = () => {
     }
   }
 
-  // Handle reaction click
-  const handleReaction = (pageId, reactionType) => {
+  // Gérer les réactions
+  const handleReaction = (pageId, reactionType, e) => {
+    e.stopPropagation()
     setReactions((prev) => {
       const pageReactions = prev[pageId] || {}
       return {
@@ -499,10 +532,10 @@ const HallDesFins = () => {
       }
     })
   }
-
-  // Get reaction count (simulated)
+  
+  
   const getReactionCount = (pageId, reactionType) => {
-    // Base counts
+    // Nombres de base
     const baseCounts = {
       feel: 12,
       applaud: 24,
@@ -510,12 +543,12 @@ const HallDesFins = () => {
       support: 15,
     }
 
-    // Add 1 if user reacted
+    // Ajouter 1 si l'utilisateur a réagi
     const userReacted = reactions[pageId]?.[reactionType] ? 1 : 0
     return baseCounts[reactionType] + userReacted
   }
 
-  // Toggle search bar
+  // Basculer la barre de recherche
   const toggleSearch = () => {
     setShowSearch(!showSearch)
     if (!showSearch) {
@@ -525,24 +558,24 @@ const HallDesFins = () => {
     }
   }
 
-  // Open page detail in portal
+  // Ouvrir le détail de la page dans le portail
   const openPageDetail = (page) => {
     setSelectedPage(page)
     setPortalOpen(true)
 
-    // Disable scrolling on body
+    // Désactiver le défilement sur le corps
     document.body.style.overflow = "hidden"
   }
 
-  // Close portal
+  // Fermer le portail
   const closePortal = () => {
     setPortalOpen(false)
 
-    // Re-enable scrolling
+    // Réactiver le défilement
     document.body.style.overflow = "auto"
   }
 
-  // Ajouter cette fonction pour gérer les options de test
+  // Gérer les options de test
   const handleTestOptionChange = (option, value) => {
     setTestOptions((prev) => ({
       ...prev,
@@ -550,7 +583,7 @@ const HallDesFins = () => {
     }))
   }
 
-  // Ajouter cette fonction pour prévisualiser la fin
+  // Prévisualiser la fin
   const previewTestEnd = () => {
     // Simuler une prévisualisation
     const previewPage = {
@@ -569,15 +602,6 @@ const HallDesFins = () => {
     openPageDetail(previewPage)
     setTestMenuVisible(false)
   }
-
-  // Gérer la fin du quiz
-  const handleQuizComplete = (result) => {
-    setQuizResult(result)
-    // Rediriger vers la section d'écriture
-    setActiveSection("write")
-    window.location.hash = "write"
-  }
-
   // Rendu conditionnel en fonction de la section active
   const renderContent = () => {
     switch (activeSection) {
@@ -605,10 +629,10 @@ const HallDesFins = () => {
                       aria-label="Filter by emotion"
                     >
                       <option value="tous">{t.all}</option>
-                      <option value="humour">{t.humor}</option>
-                      <option value="tristesse">{t.sadness}</option>
-                      <option value="rage">{t.rage}</option>
-                      <option value="nostalgie">{t.nostalgia}</option>
+                      <option value="colère">colère</option>
+                      <option value="triste">triste</option>
+                      <option value="rage">rage</option>
+                      <option value="surpris">surpris</option>
                     </select>
                     <ChevronDown className="select-icon" />
                   </div>
@@ -623,9 +647,9 @@ const HallDesFins = () => {
                       aria-label="Filter by type"
                     >
                       <option value="tous">{t.all}</option>
-                      <option value="démission">{t.resignation}</option>
-                      <option value="rupture">{t.breakup}</option>
-                      <option value="départ">{t.departure}</option>
+                      <option value="démission">démission</option>
+                      <option value="rupture">rupture</option>
+                      <option value="départ">départ</option>
                     </select>
                     <ChevronDown className="select-icon" />
                   </div>
@@ -635,8 +659,8 @@ const HallDesFins = () => {
                   <label>{t.sortBy}</label>
                   <div className="select-wrapper">
                     <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} aria-label="Sort by">
-                      <option value="recent">{t.recent}</option>
-                      <option value="popular">{t.popular}</option>
+                      <option value="recent">top</option>
+                      <option value="popular">tous</option>
                     </select>
                     <ChevronDown className="select-icon" />
                   </div>
@@ -661,6 +685,7 @@ const HallDesFins = () => {
                           src={page.preview || "/placeholder.svg"}
                           alt={page.title}
                           className={hoveredCard === page.id ? "zoom-effect" : ""}
+                          crossOrigin="anonymous"
                         />
                         <div className="overlay"></div>
                         <div className="card-date">
@@ -675,7 +700,8 @@ const HallDesFins = () => {
                       </div>
                       <div className="card-content">
                         <div className="card-meta">
-                          <span className={`badge small emotion ${page.emotion}`}>{getEmotionLabel(page.emotion)}</span>
+                          <span className={`badge small emotion ${page.emotion}`}>{getEmotionLabel(page.expression
+)}</span>
                           <span className="badge small type">{getTypeLabel(page.type)}</span>
                         </div>
                         <h3>{page.title}</h3>
@@ -684,40 +710,28 @@ const HallDesFins = () => {
                         <div className="card-reactions">
                           <div
                             className={`card-reaction ${reactions[page.id]?.feel ? "active" : ""}`}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleReaction(page.id, "feel")
-                            }}
+                            onClick={(e) => handleReaction(page.id, "feel", e)}
                           >
                             <MessageCircle className="reaction-icon" />
                             <span className="reaction-count">{getReactionCount(page.id, "feel")}</span>
                           </div>
                           <div
                             className={`card-reaction ${reactions[page.id]?.applaud ? "active" : ""}`}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleReaction(page.id, "applaud")
-                            }}
+                            onClick={(e) => handleReaction(page.id, "applaud", e)}
                           >
                             <Award className="reaction-icon" />
                             <span className="reaction-count">{getReactionCount(page.id, "applaud")}</span>
                           </div>
                           <div
                             className={`card-reaction ${reactions[page.id]?.laugh ? "active" : ""}`}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleReaction(page.id, "laugh")
-                            }}
+                            onClick={(e) => handleReaction(page.id, "laugh", e)}
                           >
                             <Sparkles className="reaction-icon" />
                             <span className="reaction-count">{getReactionCount(page.id, "laugh")}</span>
                           </div>
                           <div
                             className={`card-reaction ${reactions[page.id]?.support ? "active" : ""}`}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              handleReaction(page.id, "support")
-                            }}
+                            onClick={(e) => handleReaction(page.id, "support", e)}
                           >
                             <Heart className="reaction-icon" />
                             <span className="reaction-count">{getReactionCount(page.id, "support")}</span>
@@ -753,11 +767,15 @@ const HallDesFins = () => {
         )
       case "drama":
         return (
-          <ApresFin/>
+          <Suspense fallback={<div className="loading">Chargement...</div>}>
+            <ApresFin />
+          </Suspense>
         )
       case "write":
         return (
-          <Ecrire/>
+          <Suspense fallback={<div className="loading">Chargement...</div>}>
+            <Ecrire />
+          </Suspense>
         )
       default:
         return null
@@ -765,33 +783,18 @@ const HallDesFins = () => {
   }
 
   return (
-    <div className={`hall-container  ${darkMode ? "dark-mode" : "light-mode"}`} ref={containerRef}>
+    <div className={`hall-container ${darkMode ? "dark-mode" : "light-mode"}`} ref={containerRef}>
       {/* Custom cursor */}
       <div className="cursor" ref={cursorRef}></div>
       <div className="cursor-dot" ref={cursorDotRef}></div>
 
-      {/* Animated background */}
+      {/* Fond animé */}
       <div className="stars-container">
         <div className="stars" ref={starsRef}></div>
       </div>
 
-      {/* Portal Animation */}
-      <div className={`portal-container ${portalOpen ? "open" : ""}`}>
-        <div className="portal-ring outer"></div>
-        <div className="portal-ring middle"></div>
-        <div className="portal-ring inner"></div>
-        <div className="portal-light"></div>
-      </div>
-
-      {/* Welcome message that fades in and out */}
-      {!animationComplete && (
-        <div className="welcome-message">
-          <h1>Bienvenue dans le Hall des Fins</h1>
-        
-        </div>
-      )}
-
-      {/* Page detail portal */}
+      
+      {/* Portail de détail de page */}
       {selectedPage && (
         <div className={`page-portal ${portalOpen ? "open" : ""}`} ref={portalRef}>
           <div className="portal-content">
@@ -799,12 +802,14 @@ const HallDesFins = () => {
               ×
             </button>
 
-           
-
             <div className="portal-body">
-              <DernierFin/>
-         
-             </div>
+              <Suspense fallback={<div className="loading">Chargement...</div>}>
+                 <button className="close-portal" onClick={closePortal}>
+              ×
+            </button>
+                <DernierFin />
+              </Suspense>
+            </div>
           </div>
         </div>
       )}
@@ -861,7 +866,7 @@ const HallDesFins = () => {
           </div>
         </div>
 
-        {/* Search bar */}
+        {/* Barre de recherche */}
         <div className={`search-bar ${showSearch ? "open" : ""}`}>
           <input
             id="search-input"
@@ -985,16 +990,9 @@ const HallDesFins = () => {
         </div>
       </div>
 
-      {/* Ajouter ce bouton flottant juste avant la fermeture de la div hall-container */}
+      {/* Bouton flottant */}
       {activeSection === "hall" && (
-        <button
-          className="test-preview-btn"
-          style={{
-            position: "fixed",
-            bottom: "30px",
-            right: "30px",
-          }}
-        >
+        <button className="test-preview-btn floating-btn" onClick={() => setTestMenuVisible(true)}>
           <Eye size={16} />
           <span>Tester ma fin</span>
         </button>

@@ -1,11 +1,11 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { User, Lock, Mail, Eye, EyeOff, Sun, Moon, Globe, Flame, DoorOpen, ChevronDown, Check, AlertCircle } from "lucide-react";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { api } from "../hooks/api";
-import { useNavigate } from "react-router-dom";
+import React from "react"
+import { useState, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { User, Lock, Mail, Eye, EyeOff, Sun, Moon, Globe, Flame, DoorOpen, ChevronDown, Check, AlertCircle } from "lucide-react"
+import { Link, redirect } from "react-router-dom"
+import axios from "axios"
+import { api } from "../hooks/api"
+import { useNavigate } from "react-router-dom"
 
 export default function Connexion() {
   // États
@@ -117,6 +117,36 @@ export default function Connexion() {
     e.preventDefault();
     if (validateForm()) {
       setIsSubmitting(true);
+
+      
+
+      axios.post(`${api}/login/`,{email:formData.email, password:formData.password})
+      .then(res=>{
+        localStorage.setItem('token',res.data.access)
+        console.log(localStorage.getItem('token'))
+         useNavigate("./hall")
+         setIsSubmitting(false)
+        setIsSuccess(true)
+        // Réinitialiser le succès après 3 secondes
+         setTimeout(() => {
+          setIsSuccess(false)
+          setFormData({
+            name: "",
+            email: "",
+            password: "",
+            gender: "MASCULIN",
+          })
+          setRecaptchaVerified(false)
+        }, 2000)
+        
+      })
+      .catch(error=>{console.log(error)})
+    }
+  }
+if (localStorage.getItem('token'))
+  {
+          navigation("../hall")
+  }
 
       axios
         .post(`${api}/login/`, { email: formData.email, password: formData.password })

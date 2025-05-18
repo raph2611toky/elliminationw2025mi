@@ -14,10 +14,14 @@
     "@react-three/fiber": "^9.1.2",
     "axios": "^1.9.0",
     "framer-motion": "^12.12.1",
+    "loadash": "^1.0.0",
     "lucide-react": "^0.511.0",
     "react": "^19.1.0",
+    "react-confetti": "^6.4.0",
     "react-dom": "^19.1.0",
     "react-router-dom": "^6.30.0",
+    "react-spring": "^10.0.0",
+    "react-use": "^17.6.0",
     "three": "^0.176.0"
   },
   "devDependencies": {
