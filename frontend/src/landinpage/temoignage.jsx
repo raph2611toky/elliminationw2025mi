@@ -430,15 +430,15 @@ const TestimonialsSection = (language,darkMode) => {
                 </div>
               </div>
 
-              {/* Bouton voir */}
-              <motion.button
+              {/* Bouton  */}
+              <motion.p
                 className="mt-6 w-full py-2 bg-gradient-to-r from-red-500 to-orange-400 hover:from-red-500 hover:to-red-400 text-white rounded-lg flex items-center justify-center group"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <span>Voir cette page</span>
+                <span>Un page page unique</span>
                 <ExternalLink className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
-              </motion.button>
+              </motion.p>
 
               {/* Effet de flamme au survol */}
               {renderCardFlames(testimonial.id)}

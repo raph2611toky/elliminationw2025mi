@@ -4,6 +4,7 @@ import Inscription from './authentification/inscription'
 import Connexion from './authentification/connexion'
 import ChatBotTheEnd from './finalBot/finalBoth'
 import HallDesFins from './hallDesFins/hallDesFins'
+import Mesfins from './mesFins/mesfin'
 function App() {
   
   return(<>
@@ -13,6 +14,7 @@ function App() {
             <Route path='/connexion' element={<Connexion/>}/>
             <Route path='/home/finalBot' element={<ChatBotTheEnd/>}/>
             <Route path ="/hall"  element={<HallDesFins/>}/> 
+            <Route path ="/mesfin"  element={<Mesfins/>}/> 
    </Routes>  
   </>)
 }

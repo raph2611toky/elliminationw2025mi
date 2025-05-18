@@ -22,6 +22,7 @@ import {
   Zap,
   BrainCircuit,
 } from "lucide-react"
+import ChatBotTheEnd from "../finalBot/finalBoth"
 const Ecrire = React.lazy(() => import("../ecrireMaFin/ecrireMaFin"))
 const ApresFin = React.lazy(() => import("../apresFin/apresFin"))
 const DernierFin = React.lazy(() => import("../DernierFin/DernierFin"))
@@ -764,7 +765,7 @@ const HallDesFins = () => {
   }
 
   return (
-    <div className={`hall-container ${darkMode ? "dark-mode" : "light-mode"}`} ref={containerRef}>
+    <div className={`hall-container  ${darkMode ? "dark-mode" : "light-mode"}`} ref={containerRef}>
       {/* Custom cursor */}
       <div className="cursor" ref={cursorRef}></div>
       <div className="cursor-dot" ref={cursorDotRef}></div>
@@ -808,7 +809,7 @@ const HallDesFins = () => {
         </div>
       )}
 
-      <header className="header">
+      <header className="header -z-10">
         <div className="header-content">
           <div className="logo">
             <span className="logo-text">TheEnd</span>
@@ -997,7 +998,9 @@ const HallDesFins = () => {
           <Eye size={16} />
           <span>Tester ma fin</span>
         </button>
+        
       )}
+      <ChatBotTheEnd/>
     </div>
   )
 }

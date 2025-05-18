@@ -1,10 +1,13 @@
+import ChatBotTheEnd from "../finalBot/finalBoth";
+import './apresFin.css'
 function ApresFin(){
-
     return(
-        <div>
 
-
-        </div>
+       <div>
+            <div className="chatbot-container">
+                <ChatBotTheEnd />
+            </div>
+       </div>
     );
 
 

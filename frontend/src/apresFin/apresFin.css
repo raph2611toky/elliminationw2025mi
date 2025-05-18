@@ -1,0 +1,205 @@
+/* Google Fonts import */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap");
+
+/* Base styles */
+:root {
+  /* Color palette */
+  --primary: #8b4513;
+  --primary-light: #a05a2c;
+  --primary-dark: #6b3000;
+  --accent: #4a6741;
+  --accent-soft: #5d7d53;
+
+  /* Emotion colors */
+  --emotion-humor: #e9c46a;
+  --emotion-sadness: #457b9d;
+  --emotion-rage: #e76f51;
+  --emotion-nostalgia: #8a5a83;
+
+  /* UI colors */
+  --light-bg: #f8f5f1;
+  --dark-bg: #0f0d1a;
+  --light-card: #ffffff;
+  --dark-card: #1a1825;
+  --light-text: #2d2a26;
+  --dark-text: #e8e5e1;
+  --light-border: rgba(0, 0, 0, 0.08);
+  --dark-border: rgba(255, 255, 255, 0.08);
+
+  /* Shadows */
+  --shadow-light: 0 2px 20px rgba(0, 0, 0, 0.05);
+  --shadow-dark: 0 2px 20px rgba(0, 0, 0, 0.2);
+
+  /* Typography */
+  --font-heading: "Playfair Display", serif;
+  --font-body: "Source Serif 4", serif;
+  --font-ui: "Inter", sans-serif;
+
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-smooth: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+  /* Portal colors */
+  --portal-outer: #8b4513;
+  --portal-middle: #a05a2c;
+  --portal-inner: #c17d4f;
+  --portal-light: rgba(255, 215, 175, 0.5);
+  
+  /* 3D Quill colors */
+  --quill-feather: #e8e5e1;
+  --quill-shaft: #8b4513;
+  --quill-tip: #2d2a26;
+}
+
+/* ... (reste des styles de base inchangés) ... */
+
+body {
+  font-family: var(--font-body);
+  line-height: 1.6;
+  transition: background-color var(--transition-smooth);
+  overflow-x: hidden;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative; /* Ajout pour supporter les portails */
+}
+
+/* Curseur personnalisé avec plume 3D */
+.cursor {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  z-index: 10001; /* Au-dessus de tout, y compris le chatBot */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cursor-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 10002; /* Au-dessus du curseur principal */
+  transition: width 0.3s, height 0.3s, background-color 0.3s;
+  opacity: 0;
+  box-shadow: 0 0 10px rgba(139, 69, 19, 0.5);
+}
+
+/* Ajustement du z-index pour le portail de page */
+.page-portal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 40; /* Réduit pour être en dessous du chatBot */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.page-portal.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Ajustement du bouton flottant pour éviter le conflit avec le chatBot */
+.floating-btn,
+.test-preview-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 30; /* En dessous du chatBot */
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+  animation: floatButton 3s ease-in-out infinite;
+}
+
+/* Ajout d'une règle pour le conteneur du chatBot */
+.chatbot-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 50; /* Au-dessus du portail et du bouton flottant */
+  pointer-events: auto; /* Assure que les clics passent au chatBot */
+}
+
+/* Désactiver les interférences du curseur avec le chatBot */
+.cursor,
+.cursor-dot {
+  pointer-events: none !important; /* Évite d'interférer avec les clics sur le chatBot */
+}
+
+/* Ajuster les effets visuels pour ne pas masquer le chatBot */
+.card-shine,
+.engraving-effect,
+.magic-particle,
+.hover-glow {
+  z-index: 35; /* En dessous du chatBot */
+}
+
+/* ... (reste du CSS inchangé, y compris les animations, sections, etc.) ... */
+
+/* Responsive */
+@media (max-width: 900px) {
+  .gallery-title {
+    font-size: 42px;
+  }
+
+  .gallery-subtitle {
+    font-size: 20px;
+  }
+
+  /* Désactiver le curseur personnalisé sur les petits écrans */
+  * {
+    cursor: auto;
+  }
+
+  .cursor,
+  .cursor-dot,
+  .ink-canvas,
+  .engraving-effect,
+  .magic-particle,
+  .hover-glow {
+    display: none;
+  }
+
+  .chatbot-container {
+    bottom: 20px; /* Ajustement pour petits écrans */
+    right: 20px;
+  }
+
+  .floating-btn,
+  .test-preview-btn {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* ... (reste inchangé) ... */
+
+  .chatbot-container {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* ... (reste inchangé) ... */
+
+  .chatbot-container {
+    bottom: 15px;
+    right: 15px;
+  }
+}

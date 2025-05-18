@@ -2,10 +2,10 @@ import React from "react"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { User, Lock, Mail, Eye, EyeOff, Sun, Moon, Globe, Flame, DoorOpen, ChevronDown, Check, AlertCircle } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, redirect } from "react-router-dom"
 import axios from "axios"
 import { api } from "../hooks/api"
-
+import { useNavigate } from "react-router-dom"
 
 export default function Connexion() {
   // États
@@ -17,6 +17,7 @@ export default function Connexion() {
     email: "",
     password: "",
   })
+  const navigation = useNavigate()
 
   const [errors, setErrors] = useState({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -90,7 +91,7 @@ export default function Connexion() {
     // Validation du mot de passe
     if (!formData.password) {
       newErrors.password = Traduction("Le mot de passe est requis", "Password is required", "Ilaina ny tenimiafina")
-    } else if (formData.password.length < 8) {
+    } else if (formData.password.length < 3) {
       newErrors.password = Traduction(
         "Le mot de passe doit contenir au moins 8 caractères",
         "Password must be at least 6 characters",
@@ -117,12 +118,12 @@ export default function Connexion() {
     if (validateForm()) {
       setIsSubmitting(true)
 
-      // Simuler une requête API
+      
 
       axios.post(`${api}/login/`,{email:formData.email, password:formData.password})
       .then(res=>{
-        localStorage.setItem(res.data.name,res.data.access)
-         setIsSubmitting(false)
+        localStorage.setItem('token',res.data.access)
+        setIsSubmitting(false)
         setIsSuccess(true)
         // Réinitialiser le succès après 3 secondes
          setTimeout(() => {
@@ -135,11 +136,15 @@ export default function Connexion() {
           })
           setRecaptchaVerified(false)
         }, 2000)
+        
       })
       .catch(error=>{console.log(error)})
     }
   }
-
+if (localStorage.getItem('token'))
+  {
+          navigation("../hall")
+  }
   // // Fermer le menu de langue si on clique ailleurs
   // useEffect(() => {
   //   const handleClickOutside = (event) => {
@@ -204,7 +209,7 @@ export default function Connexion() {
             className={`absolute w-1.5 h-1.5 rounded-full ${darkMode ? "bg-amber-400/40" : "bg-amber-600/40"}`}
             style={{
               left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`
             }}
             animate={{
               x: [0, Math.random() * 100 - 50, 0],
@@ -233,7 +238,7 @@ export default function Connexion() {
           {/* Bouton de changement de mode */}
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className={`ml-2 p-2 rounded-full  transition-colors duration-200`}
+            className='ml-2 p-2 rounded-full  transition-colors duration-200'
             aria-label={darkMode ? "Activer le mode clair" : "Activer le mode sombre"}>
               {darkMode ? <Sun size={18} color={`${darkMode ? "black": "white"}`}/> : <Moon size={18} color={`${darkMode ? "black": "white"}`}/>}
           </button>
@@ -242,7 +247,7 @@ export default function Connexion() {
          <div className="relative">
               <button
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
-                             className={`flex items-center px-3 py-2 rounded-md transition-colors duration-200`}
+                             className="flex items-center px-3 py-2 rounded-md transition-colors duration-200"
                            >
                              <Globe size={18} className="mr-1" color={`${darkMode ? "black": "white"}`} />
                              <span className={`${darkMode ? "text-black": "text-white"} uppercase`}>{language}</span>
@@ -276,7 +281,7 @@ export default function Connexion() {
                                    </button>
                                  ))}
                                </div>
-                             </motion.div>
+                    </motion.div>
                            )}
                          </div>
           
@@ -320,7 +325,7 @@ export default function Connexion() {
                 {Traduction("Bienvenue dans l’ultime acte", "Welcome to the final act", "Tongasoa eto am-pamaranana")}
               </motion.h2>
               <motion.p
-                className={`${darkMode ? "text-black" : "text-white"} te`}
+                className={`${darkMode ? "text-black" : "text-white"} `}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{  steel :0.5, delay: 0.4 }}
@@ -537,5 +542,5 @@ export default function Connexion() {
 
 // Définir la fonction de callback globale pour reCAPTCHA
 window.recaptchaCallback = function(value) {
-  document.dispatchEvent(new CustomEvent("recaptchaChange", { detail: value }))
+  document.dispatchEvent(new CustomEvent("recaptchaChange", { detail: value }))
 }

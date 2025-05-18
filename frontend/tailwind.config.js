@@ -10,6 +10,8 @@ export default {
       {
         blanc : "#F5F7F8",
         noir :  "#131313",
+        chocolat : "#a05a2c",
+        chocolat1 : "#8b4513"
       },
       screens: {
   			xs: '320px'

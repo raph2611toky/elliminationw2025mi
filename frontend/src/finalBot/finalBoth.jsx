@@ -1,5 +1,4 @@
 "use client"
-
 import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
@@ -16,12 +15,14 @@ import {
   ChevronRight,
   Maximize,
   Minimize,
+  MessageCircle,
+  Sparkles,
 } from "lucide-react"
-import Viewer from "./bot"
 import axios from "axios"
 import { api } from "../hooks/api"
+
 export default function ChatBotTheEnd() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [ouvrir, setOuvrir] = useState(false)
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -32,7 +33,7 @@ export default function ChatBotTheEnd() {
   ])
 
   const [inputValue, setInputValue] = useState("")
-  const [titre,setTitre] = useState("")
+  const [titre, setTitre] = useState("")
   const [isTyping, setIsTyping] = useState(false)
   const [darkMode, setDarkMode] = useState(true)
   const [showWelcome, setShowWelcome] = useState(true)
@@ -41,7 +42,7 @@ export default function ChatBotTheEnd() {
   const [activeEmoji, setActiveEmoji] = useState(null)
   const messagesEndRef = useRef(null)
   const [showSuggestions, setShowSuggestions] = useState(true)
-
+ console.log(inputValue,titre)
   // Suggestions de questions rapides
   const suggestions = [
     "Comment personnaliser ma page?",
@@ -51,81 +52,39 @@ export default function ChatBotTheEnd() {
   ]
 
   // Simulating bot typing and response
-  const handleSendMessage = (content = inputValue.trim()) => {
-    if (content === "") return
+  const handleSendMessage = (e, content = inputValue.trim()) => {
+  e.preventDefault();
+  if (content === "") return;
 
-    // Add user message
-    const newUserMessage = { id: messages.length + 1, type: "user", content: content }
-    setMessages([...messages, newUserMessage])
-    setInputValue("")
-    setShowSuggestions(false)
+  const newUserMessage = { id: messages.length + 1, type: "user", content: content };
+  setMessages([...messages, newUserMessage]);
+  setInputValue("");
+  setShowSuggestions(false);
 
+  setIsTyping(true);
 
-    // Simulate bot typing
-    setIsTyping(true) 
-
-    // Generate bot response after a delay
-    // setTimeout(() => {
-    //   setIsTyping(false)
-
-    //   let botResponse
-    //   const lowerContent = content.toLowerCase()
-    //   if (lowerContent.includes("page") || lowerContent.includes("personnalis")) {
-    //     botResponse =
-    //       "Pour créer votre page de départ personnalisée, vous pouvez choisir parmi nos modèles ou créer la vôtre depuis zéro. Nous proposons des thèmes dramatiques, ironiques, ultra cringe, classe, touchants, absurdes, passifs-agressifs ou simplement honnêtes. Quel style vous intéresse?"
-    //   } else if (
-    //     lowerContent.includes("modèle") ||
-    //     lowerContent.includes("template") ||
-    //     lowerContent.includes("thème")
-    //   ) {
-    //     botResponse =
-    //       "Nos thèmes sont conçus pour maximiser l'impact de votre départ. Le thème 'Dramatique' utilise des flammes et des effets visuels intenses, 'Ironique' joue sur le contraste et l'humour, 'Ultra cringe' est... eh bien, ultra cringe! Lequel vous attire le plus?"
-    //   } else if (lowerContent.includes("gif") || lowerContent.includes("image")) {
-    //     botResponse =
-    //       "Vous pouvez ajouter des GIFs et images à votre page de départ! Nous avons une bibliothèque intégrée ou vous pouvez importer les vôtres. Les GIFs peuvent être placés en arrière-plan ou comme éléments interactifs. Voulez-vous voir quelques exemples?"
-    //   } else if (lowerContent.includes("son") || lowerContent.includes("audio") || lowerContent.includes("musique")) {
-    //     botResponse =
-    //       "Les effets sonores et la musique peuvent rendre votre départ encore plus mémorable! Vous pouvez ajouter un son de porte qui claque, une musique dramatique, ou même enregistrer votre propre message vocal. Que préférez-vous?"
-    //   } else if (lowerContent.includes("merci") || lowerContent.includes("super")) {
-    //     botResponse =
-    //       "C'est un plaisir de vous aider! N'hésitez pas si vous avez d'autres questions. Votre page de départ sera inoubliable, je vous le garantis!"
-    //   } else if (
-    //     lowerContent.includes("démission") ||
-    //     lowerContent.includes("quitter") ||
-    //     lowerContent.includes("job") ||
-    //     lowerContent.includes("travail")
-    //   ) {
-    //     botResponse =
-    //       "Pour une démission mémorable, notre thème 'Passif-agressif' est très populaire! Vous pouvez y ajouter une liste de griefs, des statistiques sur votre temps perdu, et même un compteur montrant combien vous avez économisé en santé mentale depuis votre départ. Souhaitez-vous explorer ce thème?"
-    //   } else if (
-    //     lowerContent.includes("rupture") ||
-    //     lowerContent.includes("couple") ||
-    //     lowerContent.includes("relation")
-    //   ) {
-    //     botResponse =
-    //       "Les ruptures sont difficiles, mais votre page peut être cathartique. Notre thème 'Honnête' permet d'exprimer vos sentiments avec élégance, tandis que 'Dramatique' offre plus d'impact visuel. Vous pouvez même ajouter une playlist de chansons de rupture. Quelle approche préférez-vous?"
-    //   } else {
-    //     botResponse =
-    //       "Je comprends. Pour aller plus loin, je vous propose d'explorer les différentes sections de personnalisation: arrière-plans animés, widgets interactifs, effets sonores et paramètres de confidentialité. Par où souhaitez-vous commencer?"
-    //   }
-
-    //   const newBotMessage = { id: messages.length + 2, type: "bot", content: botResponse }
-    //   setMessages((prevMessages) => [...prevMessages, newBotMessage])
-
-    //   // Réafficher les suggestions après la réponse du bot
-    //   setTimeout(() => {
-    //     setShowSuggestions(true)
-    //   }, 1000)
-    // }, 1500)
-
-
-    axios.post(`${api}/conversations/create/`,{message: inputValue, titre:titre})
-    .then(res=>{
-      console.log(res.data)
+  const token = localStorage.getItem("token");
+  console.log(token) // Ajustez selon votre gestion d'authentification
+  axios
+    .post(
+      `${api}/conversations/create/`,
+      { message: inputValue, domain: titre },
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      }
+    )
+    .then((res) => {
+      axios.get(`${api}/conversations/`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      })
+      .then(res=>{console.log(res.data),setIsTyping(false);})
+      .catch(err=>console.log(err))
     })
-    .catch(err=>{console.log(err)})
-  }
-
+    .catch((err) => {
+      console.log(err.response ? err.response.data : err.message);
+    });
+};
   // Auto-scroll to bottom of messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -170,7 +129,7 @@ export default function ChatBotTheEnd() {
     hover: { scale: 1.1, rotate: [0, -10, 10, -10, 0], transition: { duration: 0.5 } },
     tap: { scale: 0.9 },
     pulse: {
-      scale: [1, 1.1, 1],
+      scale: [1, 1.05, 1],
       boxShadow: ["0 0 0 0 rgba(220, 38, 38, 0)", "0 0 0 10px rgba(220, 38, 38, 0.3)", "0 0 0 0 rgba(220, 38, 38, 0)"],
       transition: {
         duration: 2,
@@ -215,7 +174,7 @@ export default function ChatBotTheEnd() {
     if (!buttonHovered) return null
 
     return (
-      <div className="absolute -bottom-2 left-0 right-0 h-6 overflow-hidden pointer-events-none">
+      <div className="absolute -bottom-2  z-10 left-0 right-0 h-6 overflow-hidden pointer-events-none">
         {Array.from({ length: 10 }).map((_, i) => (
           <motion.div
             key={`flame-${i}`}
@@ -243,27 +202,25 @@ export default function ChatBotTheEnd() {
 
   return (
     <div
-      className={`font-sans ${
-        darkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
-      } min-h-screen flex flex-col items-center justify-center p-4`}
+      className={`font-sans ${darkMode ? "text-white" : "text-gray-900"} flex flex-col items-center justify-center p-4`}
     >
       {/* Main Content */}
       <div className="w-full max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Chat Bot Interface */}
           <div className="relative h-full">
-            <div className={`fixed bottom-6 right-6 z-50 ${expanded ? "w-full max-w-md" : ""}`}>
+            <div className={`fixed top-6 right-6 z-50 ${expanded ? "w-full max-w-md" : ""}`}>
               <AnimatePresence mode="wait">
-                {!isOpen ? (
+                {!ouvrir ? (
                   <motion.div
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0, opacity: 0 }}
-                    transition={{ type: "spring", damping: 20 }}
+                    initial={{ scale: 0, opacity: 0, rotate: -180 }}
+                    animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                    exit={{ scale: 0, opacity: 0, rotate: 180 }}
+                    transition={{ type: "spring", damping: 15, stiffness: 200 }}
                     className="relative"
                   >
                     <motion.button
-                      onClick={() => setIsOpen(true)}
+                      onClick={() => setOuvrir(true)}
                       variants={buttonVariants}
                       initial="initial"
                       animate={buttonHovered ? "hover" : "pulse"}
@@ -271,9 +228,9 @@ export default function ChatBotTheEnd() {
                       whileTap="tap"
                       onHoverStart={() => setButtonHovered(true)}
                       onHoverEnd={() => setButtonHovered(false)}
-                      className={`w-16 h-16 rounded-full shadow-lg flex items-center justify-center  bg-gradient-to-r from-red-500 hover:from-red-500 hover:to-red-400 ext-white transition-all duration-300 shadow-red-500/20`}
+                      className="w-16 h-16 rounded-full shadow-lg flex items-center justify-center bg-gradient-to-br from-red-600 to-yellow-600 text-white transition-all duration-300 shadow-lg shadow-red-500/30"
                     >
-                      <DoorClosed size={28} />
+                      <MessageCircle size={28} />
                     </motion.button>
                     {renderParticles()}
                     {renderButtonFlame()}
@@ -282,10 +239,10 @@ export default function ChatBotTheEnd() {
                     <motion.div
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: 1, type: "spring", damping: 20 }}
-                      className="absolute -top-2 -right-2 bg-white text-red-600 rounded-full px-2 py-1 text-xs font-bold shadow-md border border-red-200"
+                      transition={{ delay: 0.5, type: "spring", damping: 20 }}
+                      className="absolute -top-2 -right-2 bg-white text-red-600 rounded-full px-2 py-1 text-xs font-bold shadow-md border border-red-200 flex items-center"
                     >
-                      Nouveau
+                      <Sparkles size={10} className="mr-1" /> Nouveau
                     </motion.div>
                   </motion.div>
                 ) : (
@@ -295,44 +252,40 @@ export default function ChatBotTheEnd() {
                     exit={{ scale: 0.8, opacity: 0, y: 20 }}
                     transition={{ type: "spring", damping: 25 }}
                     className={`rounded-2xl shadow-xl overflow-hidden flex flex-col ${
-                      darkMode ? "bg-gray-800 border border-gray-700" : "bg-white border border-gray-200"
+                      darkMode ? "bg-gray-900 border border-gray-800" : "bg-white border border-gray-200"
                     } ${expanded ? "h-[80vh]" : "h-[500px]"} w-full max-w-md`}
                     style={{
                       boxShadow: darkMode
-                        ? "0 25px 50px -12px rgba(0, 0, 0, 0.5)"
-                        : "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+                        ? "0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 15px rgba(239, 68, 68, 0.2)"
+                        : "0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 15px rgba(239, 68, 68, 0.1)",
                     }}
                   >
                     {/* Chat Header */}
                     <div
                       className={`p-4 flex justify-between items-center ${
                         darkMode
-                          ? "bg-gradient-to-r from-gray-800 to-gray-700 border-b border-gray-700"
-                          : "bg-gradient-to-r from-red-600 to-red-500 text-white"
+                          ? "bg-gradient-to-r from-red-900 to-yellow-900 border-b border-gray-800"
+                          : "bg-gradient-to-r from-red-600 to-yellow-600 text-white"
                       }`}
                     >
                       <div className="flex items-center">
-                        <DoorClosed className={`mr-2 ${darkMode ? "text-red-500" : "text-white"}`} size={20} />
-                        <h3 className="font-medium">Assistant TheEnd.page</h3>
+                        <DoorClosed className="mr-2 text-white" size={20} />
+                        <h3 className="font-medium text-white">Assistant TheEnd.page</h3>
                       </div>
                       <div className="flex items-center space-x-2">
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                           onClick={() => setExpanded(!expanded)}
-                          className={`p-1 rounded-full ${
-                            darkMode ? "hover:bg-gray-700" : "hover:bg-red-400"
-                          } transition-colors`}
+                          className="p-1 rounded-full hover:bg-white/20 transition-colors text-white"
                         >
                           {expanded ? <Minimize size={18} /> : <Maximize size={18} />}
                         </motion.button>
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          onClick={() => setIsOpen(false)}
-                          className={`p-1 rounded-full ${
-                            darkMode ? "hover:bg-gray-700" : "hover:bg-red-400"
-                          } transition-colors`}
+                          onClick={() => setOuvrir(false)}
+                          className="p-1 rounded-full hover:bg-white/20 transition-colors text-white"
                         >
                           <X size={18} />
                         </motion.button>
@@ -340,7 +293,9 @@ export default function ChatBotTheEnd() {
                     </div>
 
                     {/* Chat Messages */}
-                    <div className="flex-grow overflow-y-auto p-4 space-y-4">
+                    <div
+                      className={`flex-grow overflow-y-auto p-4 space-y-4 ${darkMode ? "bg-gray-900" : "bg-gray-50"}`}
+                    >
                       {messages.map((message) => (
                         <motion.div
                           key={message.id}
@@ -352,13 +307,11 @@ export default function ChatBotTheEnd() {
                           <div
                             className={`max-w-xs rounded-2xl px-4 py-2 ${
                               message.type === "user"
-                                ? darkMode
-                                  ? "bg-gradient-to-r from-red-600 to-red-500 text-white"
-                                  : "bg-gradient-to-r from-red-600 to-red-500 text-white"
+                                ? "bg-gradient-to-r from-red-600 to-yellow-600 text-white shadow-md shadow-red-500/20"
                                 : darkMode
-                                  ? "bg-gray-700"
-                                  : "bg-gray-100"
-                            } shadow-sm`}
+                                  ? "bg-gray-800 text-white shadow-md shadow-black/10"
+                                  : "bg-white text-gray-800 shadow-md shadow-gray-200/50"
+                            }`}
                           >
                             {message.content}
                           </div>
@@ -371,13 +324,15 @@ export default function ChatBotTheEnd() {
                           className="flex justify-start"
                         >
                           <div
-                            className={`rounded-2xl px-4 py-3 ${darkMode ? "bg-gray-700" : "bg-gray-100"} shadow-sm`}
+                            className={`rounded-2xl px-4 py-3 ${
+                              darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-800"
+                            } shadow-sm`}
                           >
                             <div className="flex space-x-2">
                               <motion.div
                                 animate={{ y: [0, -5, 0] }}
                                 transition={{ duration: 0.6, repeat: Number.POSITIVE_INFINITY, repeatType: "loop" }}
-                                className={`w-2 h-2 rounded-full ${darkMode ? "bg-red-500" : "bg-red-500"}`}
+                                className="w-2 h-2 rounded-full bg-red-500"
                               ></motion.div>
                               <motion.div
                                 animate={{ y: [0, -5, 0] }}
@@ -387,7 +342,7 @@ export default function ChatBotTheEnd() {
                                   repeatType: "loop",
                                   delay: 0.15,
                                 }}
-                                className={`w-2 h-2 rounded-full ${darkMode ? "bg-orange-500" : "bg-orange-500"}`}
+                                className="w-2 h-2 rounded-full bg-orange-500"
                               ></motion.div>
                               <motion.div
                                 animate={{ y: [0, -5, 0] }}
@@ -397,7 +352,7 @@ export default function ChatBotTheEnd() {
                                   repeatType: "loop",
                                   delay: 0.3,
                                 }}
-                                className={`w-2 h-2 rounded-full ${darkMode ? "bg-yellow-500" : "bg-yellow-500"}`}
+                                className="w-2 h-2 rounded-full bg-yellow-500"
                               ></motion.div>
                             </div>
                           </div>
@@ -413,38 +368,44 @@ export default function ChatBotTheEnd() {
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
-                          className={`px-4 py-2 ${darkMode ? "bg-gray-700" : "bg-gray-50"} border-t ${
-                            darkMode ? "border-gray-600" : "border-gray-200"
+                          className={`px-4 py-3 ${
+                            darkMode ? "bg-gray-800 border-t border-gray-700" : "bg-white border-t border-gray-200"
                           }`}
                         >
-                          <p className="text-xs mb-2 opacity-70">Type de question</p>
+                          <p className={`text-xs mb-2 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                            Sur quelle question voulais vous posez ?
+                          </p>
                           <div className="flex flex-wrap gap-2">
                             <motion.button
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              onClick={()=>{setTitre("CONSEIL")}}
+                              onClick={() => {
+                                setTitre("CONSEIL")
+                              }}
                               className={`text-xs px-3 py-1.5 rounded-full ${
-                              darkMode
-                                        ? "bg-gray-600 hover:bg-gray-500 text-white"
-                                        : "bg-gray-200 hover:bg-gray-300 text-gray-800"
-                                    } transition-colors flex items-center`}
-                                  >
-                                    <span>CONSEIL</span>
-                                    <ChevronRight size={14} className="ml-1 opacity-70" />
-                              </motion.button>
-                               <motion.button
+                                darkMode
+                                  ? "bg-gradient-to-r from-red-900/70 to-yellow-900/70 hover:from-red-900 hover:to-yellow-900 text-white"
+                                  : "bg-gradient-to-r from-red-100 to-yellow-100 hover:from-red-200 hover:to-yellow-200 text-red-800"
+                              } transition-colors flex items-center shadow-sm`}
+                            >
+                              <span>CONSEIL</span>
+                              <ChevronRight size={14} className="ml-1 opacity-70" />
+                            </motion.button>
+                            <motion.button
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              onClick={()=>{setTitre("REHABILITATION")}}
+                              onClick={() => {
+                                setTitre("REHABILITATION")
+                              }}
                               className={`text-xs px-3 py-1.5 rounded-full ${
-                              darkMode
-                                        ? "bg-gray-600 hover:bg-gray-500 text-white"
-                                        : "bg-gray-200 hover:bg-gray-300 text-gray-800"
-                                    } transition-colors flex items-center`}
-                                  >
-                                    <span>REHABILITATION</span>
-                                    <ChevronRight size={14} className="ml-1 opacity-70" />
-                              </motion.button>
+                                darkMode
+                                  ? "bg-gradient-to-r from-red-900/70 to-yellow-900/70 hover:from-red-900 hover:to-yellow-900 text-white"
+                                  : "bg-gradient-to-r from-red-100 to-yellow-100 hover:from-red-200 hover:to-yellow-200 text-red-800"
+                              } transition-colors flex items-center shadow-sm`}
+                            >
+                              <span>REHABILITATION</span>
+                              <ChevronRight size={14} className="ml-1 opacity-70" />
+                            </motion.button>
                           </div>
                         </motion.div>
                       )}
@@ -453,7 +414,7 @@ export default function ChatBotTheEnd() {
                     {/* Réactions émoji */}
                     <div
                       className={`px-4 py-2 flex justify-center space-x-3 ${
-                        darkMode ? "bg-gray-700 border-t border-gray-600" : "bg-gray-50 border-t border-gray-200"
+                        darkMode ? "bg-gray-800 border-t border-gray-700" : "bg-white border-t border-gray-200"
                       }`}
                     >
                       {[
@@ -470,9 +431,9 @@ export default function ChatBotTheEnd() {
                           className={`p-2 rounded-full ${
                             activeEmoji === item.id
                               ? darkMode
-                                ? "bg-gray-600"
+                                ? "bg-gray-700"
                                 : "bg-gray-200"
-                              : "hover:bg-gray-600/20"
+                              : "hover:bg-gray-700/20"
                           } transition-colors ${item.color}`}
                         >
                           {item.emoji}
@@ -483,12 +444,10 @@ export default function ChatBotTheEnd() {
                     {/* Chat Input */}
                     <div
                       className={`p-4 ${
-                        darkMode
-                          ? "bg-gradient-to-r from-gray-800 to-gray-700 border-t border-gray-700"
-                          : "bg-white border-t border-gray-200"
+                        darkMode ? "bg-gray-800 border-t border-gray-700" : "bg-white border-t border-gray-200"
                       }`}
                     >
-                      <form  className="flex items-center gap-3">
+                      <form onSubmit={handleSendMessage} className="flex items-center gap-3">
                         <input
                           type="text"
                           value={inputValue}
@@ -497,16 +456,16 @@ export default function ChatBotTheEnd() {
                           placeholder="Posez votre question..."
                           className={`flex-grow px-4 py-3 rounded-lg ${
                             darkMode
-                              ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-                              : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500"
-                          } focus:outline-none border-y border-l transition-colors`}
+                              ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-500/50"
+                              : "bg-gray-100 border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-red-500/30"
+                          } focus:outline-none border transition-colors`}
                         />
                         <motion.button
-                        type="submit"
+                          type="submit"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           onClick={handleSendMessage}
-                          className={`px-4 py-3 rounded-xl bg-gradient-to-r from-red-700 to-yellow-700 text-white transition-all`}
+                          className="p-3 rounded-lg bg-gradient-to-r from-red-600 to-yellow-600 text-white transition-all shadow-md shadow-red-500/20 hover:shadow-lg hover:shadow-red-500/30"
                         >
                           <Send size={18} />
                         </motion.button>

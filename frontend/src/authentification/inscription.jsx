@@ -2,7 +2,7 @@ import React from "react"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { User, Lock, Mail, Eye, EyeOff, Sun, Moon, Globe, Flame, DoorOpen, ChevronDown, Check, AlertCircle } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { api } from "../hooks/api"
 
@@ -24,7 +24,9 @@ export default function Inscription() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [recaptchaVerified, setRecaptchaVerified] = useState(false)
-
+  const [navigation,setNavigation] = useState("")
+  console
+  useNavigate(navigation)
   // Fonction de traduction
   const Traduction = (francais, anglais, malagasy) => {
     switch (language) {
@@ -131,7 +133,7 @@ export default function Inscription() {
       setIsSubmitting(true)
 
       // Simuler une requête API
-
+      console.log(formData)
       axios.post(`${api}/register/`,{email:formData.email, name:formData.name, password:formData.password, sexe:formData.gender})
       .then(res=>{
         console.log(res.data)
@@ -148,6 +150,7 @@ export default function Inscription() {
           })
           setRecaptchaVerified(false)
         }, 2000)
+        setNavigation("./connexion")
       })
       .catch(error=>{console.log(error)})
     }
