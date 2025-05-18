@@ -23,6 +23,18 @@ useEffect(() => {
     idleAction.play()
   }
 }, [actions])
+
+useEffect(() => {
+  console.log('Morph Target Dictionary (Head):', nodes.Wolf3D_Head.morphTargetDictionary)
+  console.log('Morph Target Influences (Head):', nodes.Wolf3D_Head.morphTargetInfluences)
+
+  console.log('Morph Target Dictionary (EyeLeft):', nodes.EyeLeft.morphTargetDictionary)
+  console.log('Morph Target Influences (EyeLeft):', nodes.EyeLeft.morphTargetInfluences)
+
+  console.log('Morph Target Dictionary (EyeRight):', nodes.EyeRight.morphTargetDictionary)
+  console.log('Morph Target Influences (EyeRight):', nodes.EyeRight.morphTargetInfluences)
+}, [nodes])
+
   return (
     <group {...props} dispose={null} ref={group} position-y={-1}>
       <primitive object={nodes.Hips} />

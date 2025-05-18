@@ -1,9 +1,12 @@
 
 import React, { useEffect, useRef } from 'react'
 import { useAnimations, useGLTF } from '@react-three/drei'
+import { FacialExpressions } from './FacialExpressions'
+
 
 export function WomanProAvatar(props) {
   const { nodes, materials } = useGLTF('/women-pro.glb')
+  const { animation } = props;
   const group = useRef()
     // Load model geometry and materials
      // Load animations from separate GLB
@@ -19,6 +22,18 @@ export function WomanProAvatar(props) {
         idleAction.play()
       }
     }, [actions])
+
+    useEffect(() => {
+      console.log('Morph Target Dictionary (Head):', nodes.Wolf3D_Head.morphTargetDictionary)
+      console.log('Morph Target Influences (Head):', nodes.Wolf3D_Head.morphTargetInfluences)
+    
+      console.log('Morph Target Dictionary (EyeLeft):', nodes.EyeLeft.morphTargetDictionary)
+      console.log('Morph Target Influences (EyeLeft):', nodes.EyeLeft.morphTargetInfluences)
+    
+      console.log('Morph Target Dictionary (EyeRight):', nodes.EyeRight.morphTargetDictionary)
+      console.log('Morph Target Influences (EyeRight):', nodes.EyeRight.morphTargetInfluences)
+    }, [nodes])
+    
   return (
         <group {...props} ref={group} dispose={null} position-y={-1}>
           <primitive object={nodes.Hips} />

@@ -5,6 +5,9 @@ import Connexion from './authentification/connexion'
 import ChatBotTheEnd from './finalBot/finalBoth'
 import HallDesFins from './hallDesFins/hallDesFins'
 import Mesfins from './mesFins/mesfin'
+
+import CharacterConfigurator from "./3d/CharacterConfigurator";
+import ResultatEndpage from './endpage/Resultat';
 function App() {
   
   return(<>
@@ -15,6 +18,9 @@ function App() {
             <Route path='/home/finalBot' element={<ChatBotTheEnd/>}/>
             <Route path ="/hall"  element={<HallDesFins/>}/> 
             <Route path ="/mesfins"  element={<Mesfins/>}/> 
+            <Route path ="/mesfin"  element={<Mesfins/>}/> 
+            <Route path="/3d-choice" element={<CharacterConfigurator />} />
+            <Route path="/end-page" element={<ResultatEndpage />} />
    </Routes>  
   </>)
 }
