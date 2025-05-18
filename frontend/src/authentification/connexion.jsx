@@ -1,102 +1,102 @@
-import React from "react"
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { User, Lock, Mail, Eye, EyeOff, Sun, Moon, Globe, Flame, DoorOpen, ChevronDown, Check, AlertCircle } from "lucide-react"
-import { Link, redirect } from "react-router-dom"
-import axios from "axios"
-import { api } from "../hooks/api"
-import { useNavigate } from "react-router-dom"
+import React from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { User, Lock, Mail, Eye, EyeOff, Sun, Moon, Globe, Flame, DoorOpen, ChevronDown, Check, AlertCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { api } from "../hooks/api";
+import { useNavigate } from "react-router-dom";
 
 export default function Connexion() {
   // États
-  const [darkMode, setDarkMode] = useState(true)
-  const [language, setLanguage] = useState("fr")
-  const [showPassword, setShowPassword] = useState(false)
-  const [langMenuOpen, setLangMenuOpen] = useState(false)
+  const [darkMode, setDarkMode] = useState(true);
+  const [language, setLanguage] = useState("fr");
+  const [showPassword, setShowPassword] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-  })
-  const navigation = useNavigate()
+  });
+  const navigate = useNavigate(); // Renamed to `navigate` for consistency
 
-  const [errors, setErrors] = useState({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [recaptchaVerified, setRecaptchaVerified] = useState(false)
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [recaptchaVerified, setRecaptchaVerified] = useState(false);
 
   // Fonction de traduction
   const Traduction = (francais, anglais, malagasy) => {
     switch (language) {
       case "fr":
-        return francais
+        return francais;
       case "en":
-        return anglais
+        return anglais;
       case "mg":
-        return malagasy
+        return malagasy;
       default:
-        return francais
+        return francais;
     }
-  }
- 
+  };
+
   // Noms des langues
   const languages = [
     { code: "fr", name: "Français" },
     { code: "en", name: "English" },
     { code: "mg", name: "Malagasy" },
-  ]
+  ];
 
   // Gestion des changements de champs
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
+    }));
 
     // Effacer l'erreur lorsque l'utilisateur modifie le champ
     if (errors[name]) {
       setErrors((prev) => ({
         ...prev,
         [name]: undefined,
-      }))
+      }));
     }
-  }
+  };
 
   // Gestion de la vérification reCAPTCHA
   const handleRecaptchaChange = (value) => {
-    setRecaptchaVerified(!!value)
+    setRecaptchaVerified(!!value);
     if (errors.recaptcha) {
       setErrors((prev) => ({
         ...prev,
         recaptcha: undefined,
-      }))
+      }));
     }
-  }
+  };
 
   // Validation du formulaire
   const validateForm = () => {
-    const newErrors = {}
+    const newErrors = {};
 
     // Validation de l'email
     if (!formData.email.trim()) {
-      newErrors.email = Traduction("L'email est requis", "Email is required", "Ilaina ny mailaka")
+      newErrors.email = Traduction("L'email est requis", "Email is required", "Ilaina ny mailaka");
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = Traduction(
         "Veuillez entrer une adresse email valide",
         "Please enter a valid email address",
         "Ampidiro adiresy mailaka marina"
-      )
+      );
     }
 
     // Validation du mot de passe
     if (!formData.password) {
-      newErrors.password = Traduction("Le mot de passe est requis", "Password is required", "Ilaina ny tenimiafina")
+      newErrors.password = Traduction("Le mot de passe est requis", "Password is required", "Ilaina ny tenimiafina");
     } else if (formData.password.length < 3) {
       newErrors.password = Traduction(
         "Le mot de passe doit contenir au moins 8 caractères",
         "Password must be at least 6 characters",
         "Ny tenimiafina dia tokony ahitana litera 6 farafahakeliny"
-      )
+      );
     }
 
     // Validation reCAPTCHA
@@ -105,71 +105,80 @@ export default function Connexion() {
         "Veuillez vérifier que vous n'êtes pas un robot",
         "Please verify that you are not a robot",
         "Hamafiso fa tsy robot ianao"
-      )
+      );
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   // Soumission du formulaire
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (validateForm()) {
-      setIsSubmitting(true)
+      setIsSubmitting(true);
 
-      
-
-      axios.post(`${api}/login/`,{email:formData.email, password:formData.password})
-      .then(res=>{
-        localStorage.setItem('token',res.data.access)
-        setIsSubmitting(false)
-        setIsSuccess(true)
-        // Réinitialiser le succès après 3 secondes
-         setTimeout(() => {
-          setIsSuccess(false)
-          setFormData({
-            name: "",
-            email: "",
-            password: "",
-            gender: "MASCULIN",
-          })
-          setRecaptchaVerified(false)
-        }, 2000)
-        
-      })
-      .catch(error=>{console.log(error)})
+      axios
+        .post(`${api}/login/`, { email: formData.email, password: formData.password })
+        .then((res) => {
+          localStorage.setItem("token", res.data.access);
+          setIsSubmitting(false);
+          setIsSuccess(true);
+          // Réinitialiser le succès après 3 secondes et naviguer
+          setTimeout(() => {
+            setIsSuccess(false);
+            setFormData({
+              email: "",
+              password: "",
+            });
+            setRecaptchaVerified(false);
+            navigate("/3d-choice"); // Navigate after successful login
+          }, 2000);
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsSubmitting(false);
+          setErrors({
+            server: Traduction(
+              "Erreur de connexion. Vérifiez vos identifiants.",
+              "Login error. Check your credentials.",
+              "Hadisoana amin'ny fidirana. Hamarino ny fampahalalana anao."
+            ),
+          });
+        });
     }
-  }
-if (localStorage.getItem('token'))
-  {
-          navigation("../hall")
-  }
+  };
 
+  // Vérifier le token et naviguer si l'utilisateur est déjà connecté
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/3d-choice");
+    }
+  }, [navigate]);
 
   // Charger le script reCAPTCHA
   useEffect(() => {
-    const script = document.createElement("script")
-    script.src = "https://www.google.com/recaptcha/api.js"
-    script.async = true
-    document.body.appendChild(script)
+    const script = document.createElement("script");
+    script.src = "https://www.google.com/recaptcha/api.js";
+    script.async = true;
+    document.body.appendChild(script);
 
-    window.recaptchaCallback = (value) =>{
-      handleRecaptchaChange(value)
-    }
+    window.recaptchaCallback = (value) => {
+      handleRecaptchaChange(value);
+    };
+
     return () => {
-      document.body.removeChild(script)
-    }
-  }, [handleRecaptchaChange])
+      document.body.removeChild(script);
+    };
+  }, []);
 
   return (
     <div
       className={`min-h-screen flex items-center justify-center p-4 transition-colors duration-300 ${
-          
-         darkMode ? "bg-white" : "bg-black"
+        darkMode ? "bg-white" : "bg-black"
       }`}
     >
-     
       {/* Éléments décoratifs flottants */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -197,7 +206,7 @@ if (localStorage.getItem('token'))
             className={`absolute w-1.5 h-1.5 rounded-full ${darkMode ? "bg-amber-400/40" : "bg-amber-600/40"}`}
             style={{
               left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`
+              top: `${Math.random() * 100}%`,
             }}
             animate={{
               x: [0, Math.random() * 100 - 50, 0],
@@ -226,61 +235,58 @@ if (localStorage.getItem('token'))
           {/* Bouton de changement de mode */}
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className='ml-2 p-2 rounded-full  transition-colors duration-200'
-            aria-label={darkMode ? "Activer le mode clair" : "Activer le mode sombre"}>
-              {darkMode ? <Sun size={18} color={`${darkMode ? "black": "white"}`}/> : <Moon size={18} color={`${darkMode ? "black": "white"}`}/>}
+            className="ml-2 p-2 rounded-full transition-colors duration-200"
+            aria-label={darkMode ? "Activer le mode clair" : "Activer le mode sombre"}
+          >
+            {darkMode ? <Sun size={18} color={`${darkMode ? "black" : "white"}`} /> : <Moon size={18} color={`${darkMode ? "black" : "white"}`} />}
           </button>
 
           {/* Bouton de changement de langue */}
-         <div className="relative">
-              <button
-                onClick={() => setLangMenuOpen(!langMenuOpen)}
-                             className="flex items-center px-3 py-2 rounded-md transition-colors duration-200"
-                           >
-                             <Globe size={18} className="mr-1" color={`${darkMode ? "black": "white"}`} />
-                             <span className={`${darkMode ? "text-black": "text-white"} uppercase`}>{language}</span>
-                           </button>
-         
-                           {langMenuOpen && (
-                             <motion.div
-                               initial={{ opacity: 0, y: -10 }}
-                               animate={{ opacity: 1, y: 0 }}
-                               className={`${darkMode ?'bg-gray-900' : "bg-gray-100"} absolute right-0 mt-2 w-40 rounded-md shadow-lg  ring-1 ring-black ring-opacity-5 z-50 `}
-                             >
-                               <div className="py-1">
-                                 {languages.map((lang) => (
-                                   <button
-                                     key={lang.code}
-                                     onClick={() => {
-                                    setLanguage(lang.code)
-                                    setLangMenuOpen(false)
-                                     }}
-                                     className={`block w-full text-left px-4 py-2 text-sm ${
-                                       language === lang.code
-                                         ? darkMode
-                                           ? "bg-gray-100 text-black"
-                                           : "bg-gray-900 text-white"
-                                         : darkMode
-                                           ? "text-white hover:bg-gray-100 hover:text-black"
-                                           : "text-black hover:bg-gray-900 hover:text-white"
-                                     }`}
-                                   >
-                                     {lang.name}
-                                   </button>
-                                 ))}
-                               </div>
-                    </motion.div>
-                           )}
-                         </div>
-          
+          <div className="relative">
+            <button
+              onClick={() => setLangMenuOpen(!langMenuOpen)}
+              className="flex items-center px-3 py-2 rounded-md transition-colors duration-200"
+            >
+              <Globe size={18} className="mr-1" color={`${darkMode ? "black" : "white"}`} />
+              <span className={`${darkMode ? "text-black" : "text-white"} uppercase`}>{language}</span>
+            </button>
+
+            {langMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`${darkMode ? "bg-gray-900" : "bg-gray-100"} absolute right-0 mt-2 w-40 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50`}
+              >
+                <div className="py-1">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        setLanguage(lang.code);
+                        setLangMenuOpen(false);
+                      }}
+                      className={`block w-full text-left px-4 py-2 text-sm ${
+                        language === lang.code
+                          ? darkMode
+                            ? "bg-gray-100 text-black"
+                            : "bg-gray-900 text-white"
+                          : darkMode
+                            ? "text-white hover:bg-gray-100 hover:text-black"
+                            : "text-black hover:bg-gray-900 hover:text-white"
+                      }`}
+                    >
+                      {lang.name}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </div>
         </div>
 
         {/* Carte du formulaire */}
         <motion.div
-          className={`relative rounded-xl overflow-hidden ${
-             darkMode ? "bg-blanc" : "bg-noir"
-          } shadow-2xl`}
-
+          className={`relative rounded-xl overflow-hidden ${darkMode ? "bg-blanc" : "bg-noir"} shadow-2xl`}
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
@@ -288,14 +294,12 @@ if (localStorage.getItem('token'))
           {/* Sceau décoratif */}
           <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
             <motion.div
-              className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                darkMode ? "bg-noir" : "bg-blanc"
-              }`}
+              className={`w-12 h-12 rounded-full flex items-center justify-center ${darkMode ? "bg-noir" : "bg-blanc"}`}
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}
             >
-              <DoorOpen size={24} color={`${darkMode ? "white": "black"}`} />
+              <DoorOpen size={24} color={`${darkMode ? "white" : "black"}`} />
             </motion.div>
           </div>
 
@@ -304,8 +308,8 @@ if (localStorage.getItem('token'))
             {/* Titre */}
             <div className="text-center mb-8">
               <motion.h2
-                className={`text-2xl font-serif mb-2 bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-yellow-600 `}
-                style={{ fontFamily: "Roboto", fontWeight: "700"}}
+                className={`text-2xl font-serif mb-2 bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-yellow-600`}
+                style={{ fontFamily: "Roboto", fontWeight: "700" }}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
@@ -313,11 +317,11 @@ if (localStorage.getItem('token'))
                 {Traduction("Bienvenue dans l’ultime acte", "Welcome to the final act", "Tongasoa eto am-pamaranana")}
               </motion.h2>
               <motion.p
-                className={`${darkMode ? "text-black" : "text-white"} `}
+                className={`${darkMode ? "text-black" : "text-white"}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{  steel :0.5, delay: 0.4 }}
-                style={{fontFamily:"poppins"}}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                style={{ fontFamily: "poppins" }}
               >
                 {Traduction(
                   "C’est ici que tout se termine. Et ça commence par un login",
@@ -328,14 +332,10 @@ if (localStorage.getItem('token'))
             </div>
 
             {/* Formulaire */}
-            <form onSubmit={handleSubmit}className="space-y-6">
-             
+            <form onSubmit={handleSubmit} className="space-y-6">
               {/* Champ Email */}
               <div className="">
-                <label
-                  htmlFor="email"
-                  className={`block text-sm font-medium mb-2 ${darkMode ? "text-noir" : "text-blanc"}`}
-                >
+                <label htmlFor="email" className={`block text-sm font-medium mb-2 ${darkMode ? "text-noir" : "text-blanc"}`}>
                   {Traduction("Email", "Email", "Mailaka")}
                 </label>
                 <div className="relative">
@@ -344,7 +344,7 @@ if (localStorage.getItem('token'))
                       darkMode ? "text-amber-400" : "text-amber-700"
                     }`}
                   >
-                    <Mail size={18} color="orange"/>
+                    <Mail size={18} color="orange" />
                   </div>
                   <input
                     type="email"
@@ -353,9 +353,7 @@ if (localStorage.getItem('token'))
                     value={formData.email}
                     onChange={handleChange}
                     className={`pl-10 w-full px-4 py-2 rounded-lg ${
-                      darkMode
-                        ? "bg-white placeholder:text-noir"
-                        : "bg-black placeholder:text-blanc"
+                      darkMode ? "bg-white placeholder:text-noir" : "bg-black placeholder:text-blanc"
                     } border focus:outline-none focus:ring-2 ${
                       darkMode ? "focus:ring-orange-500/50" : "focus:ring-orange-700/50"
                     } ${errors.email ? (darkMode ? "border-red-500" : "border-red-500") : ""}`}
@@ -376,10 +374,7 @@ if (localStorage.getItem('token'))
 
               {/* Champ Mot de passe */}
               <div className="">
-                <label
-                  htmlFor="password"
-                  className={`block text-sm font-medium mb-2 ${darkMode ? "text-noir" : "text-blanc"}`}
-                >
+                <label htmlFor="password" className={`block text-sm font-medium mb-2 ${darkMode ? "text-noir" : "text-blanc"}`}>
                   {Traduction("Mot de passe", "Password", "Tenimiafina")}
                 </label>
                 <div className="relative">
@@ -388,7 +383,7 @@ if (localStorage.getItem('token'))
                       darkMode ? "text-amber-400" : "text-amber-700"
                     }`}
                   >
-                    <Lock size={18} color="orange"/>
+                    <Lock size={18} color="orange" />
                   </div>
                   <input
                     type={showPassword ? "text" : "password"}
@@ -397,9 +392,7 @@ if (localStorage.getItem('token'))
                     value={formData.password}
                     onChange={handleChange}
                     className={`pl-10 w-full px-4 py-2 rounded-lg ${
-                     darkMode
-                        ? "bg-white placeholder:text-noir"
-                        : "bg-black placeholder:text-blanc"
+                      darkMode ? "bg-white placeholder:text-noir" : "bg-black placeholder:text-blanc"
                     } border focus:outline-none focus:ring-2 ${
                       darkMode ? "focus:ring-orange-500/50 focus:border-0" : "focus:ring-orange-700/50 focus:border-0"
                     } ${errors.password ? (darkMode ? "border-red-500" : "border-red-500") : ""}`}
@@ -412,7 +405,7 @@ if (localStorage.getItem('token'))
                       darkMode ? "text-amber-400" : "text-amber-700"
                     }`}
                   >
-                    {showPassword ? <EyeOff size={18} color={`${darkMode ? "black": "white"}`}/> : <Eye size={18} color={`${darkMode ? "black": "white"}`}/>}
+                    {showPassword ? <EyeOff size={18} color={`${darkMode ? "black" : "white"}`} /> : <Eye size={18} color={`${darkMode ? "black" : "white"}`} />}
                   </button>
                   {errors.password && (
                     <motion.p
@@ -429,11 +422,7 @@ if (localStorage.getItem('token'))
 
               {/* reCAPTCHA */}
               <div className="flex justify-center items-center">
-                <div
-                  className="g-recaptcha"
-                  data-sitekey="6LfV5z0rAAAAAMciyH24vgr4ACjZe251DmipcB4U"
-                  data-callback="recaptchaCallback"
-                ></div>
+                <div className="g-recaptcha" data-sitekey="6LfV5z0rAAAAAMciyH24vgr4ACjZe251DmipcB4U" data-callback="recaptchaCallback"></div>
                 {errors.recaptcha && (
                   <motion.p
                     className="mt-1 text-sm text-red-500 flex items-center"
@@ -449,7 +438,8 @@ if (localStorage.getItem('token'))
               {/* Bouton de soumission */}
               <motion.button
                 type="submit"
-               className={` bg-gradient-to-r from-red-600 to-yellow-600  flex justify-center items-center w-full text-xl px-5 rounded-xl py-2 text-black font-semibold duration-200`} style={{fontFamily:"Poppins"}}
+                className={`bg-gradient-to-r from-red-600 to-yellow-600 flex justify-center items-center w-full text-xl px-5 rounded-xl py-2 text-black font-semibold duration-200`}
+                style={{ fontFamily: "Poppins" }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 disabled={isSubmitting}
@@ -462,14 +452,7 @@ if (localStorage.getItem('token'))
                       fill="none"
                       viewBox="0 0 24 24"
                     >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path
                         className="opacity-75"
                         fill="currentColor"
@@ -505,17 +488,27 @@ if (localStorage.getItem('token'))
                   </motion.div>
                 )}
               </AnimatePresence>
+
+              {/* Afficher les erreurs serveur */}
+              {errors.server && (
+                <motion.div
+                  className="mt-4 p-3 rounded-lg flex items-center bg-red-100 text-red-800"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
+                  <AlertCircle size={18} className="mr-2 flex-shrink-0" />
+                  <span>{errors.server}</span>
+                </motion.div>
+              )}
             </form>
 
             {/* Lien de connexion */}
             <div className="mt-6 text-center">
               <p className={darkMode ? "text-noir" : "text-blanc"}>
-               {Traduction("Vous n'avez pas de compte ?", "You have any account ?", "Tsy manana kaonty?")}
+                {Traduction("Vous n'avez pas de compte ?", "You have any account ?", "Tsy manana kaonty?")}
                 <Link
                   to="/inscription"
-                  className={`ml-1 font-medium ${
-                    darkMode ? "text-orange-400 hover:text-amber-300" : "text-orange-700 hover:text-amber-600"
-                  }`}
+                  className={`ml-1 font-medium ${darkMode ? "text-orange-400 hover:text-amber-300" : "text-orange-700 hover:text-amber-600"}`}
                 >
                   {Traduction("S'inscricre", "Sign in", "Hisoratra")}
                 </Link>
@@ -525,10 +518,10 @@ if (localStorage.getItem('token'))
         </motion.div>
       </motion.div>
     </div>
-  )
+  );
 }
 
 // Définir la fonction de callback globale pour reCAPTCHA
-window.recaptchaCallback = function(value) {
-  document.dispatchEvent(new CustomEvent("recaptchaChange", { detail: value }))
-}
+window.recaptchaCallback = function (value) {
+  document.dispatchEvent(new CustomEvent("recaptchaChange", { detail: value }));
+};
