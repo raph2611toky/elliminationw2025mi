@@ -1,0 +1,1 @@
+export const api = "https://backend.ikomtoky.madagascar.webcup.hodi.host/api"

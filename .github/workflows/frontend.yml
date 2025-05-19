@@ -1,0 +1,45 @@
+name: CI/CD React
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy React.js App
+    runs-on: ubuntu-latest
+    environment: webcup2025
+
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build React.js app
+        run: npm run build
+
+      - name: Package output
+        run: |
+          mkdir -p deploy_package
+          cp -r dist/* deploy_package/
+
+      - name: Copy to remote server via SCP
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSPHRASE }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "deploy_package/*"
+          target: ${{ secrets.SSH_TARGET_PATH }}
