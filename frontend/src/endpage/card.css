@@ -1,0 +1,213 @@
+.cards-wrapper {
+  width: 100%;
+  position: relative;
+  height: 350px;
+  overflow: hidden;
+}
+
+.card-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  min-height: 280px;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 15px 35px rgba(139, 90, 72, 0.15);
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.card-blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(5px);
+  z-index: 0;
+  opacity: 0.1;
+}
+
+.card-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.website {
+  font-size: 0.75rem;
+  margin-bottom: 1.2rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.quote {
+  line-height: 1.7;
+  font-weight: 500;
+  text-align: center;
+  margin: 0 auto 2rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards 0.2s;
+}
+
+.illustration {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-top: auto;
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards 0.4s;
+}
+
+.couple-image {
+  height: 90px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.heart-container {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  animation: heartBeat 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards 0.6s;
+}
+
+/* Background shapes */
+.card::before,
+.card::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.25);
+  z-index: 1;
+}
+
+.card::before {
+  width: 180px;
+  height: 180px;
+  top: -90px;
+  left: -90px;
+  animation: scaleIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.card::after {
+  width: 220px;
+  height: 220px;
+  bottom: -110px;
+  right: -110px;
+  animation: scaleIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards 0.2s;
+}
+
+.card-decoration {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.15), transparent);
+  z-index: 1;
+  animation: slideUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards 0.3s;
+}
+
+/* Hover effects */
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(139, 90, 72, 0.2);
+}
+
+.card:hover .heart-container {
+  animation: heartPulse 1s infinite alternate;
+}
+
+/* Keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heartBeat {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+}
+
+@keyframes heartPulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.2);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .card {
+    padding: 1.5rem;
+    min-height: 250px;
+  }
+
+  .quote {
+    font-size: 1rem !important;
+  }
+
+  .couple-image {
+    height: 70px;
+  }
+}

@@ -1,11 +1,11 @@
-import React from "react"
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { User, Lock, Mail, Eye, EyeOff, Sun, Moon, Globe, Flame, DoorOpen, ChevronDown, Check, AlertCircle } from "lucide-react"
-import { Link, redirect } from "react-router-dom"
-import axios from "axios"
-import { api } from "../hooks/api"
-import { useNavigate } from "react-router-dom"
+import React from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { User, Lock, Mail, Eye, EyeOff, Sun, Moon, Globe, Flame, DoorOpen, ChevronDown, Check, AlertCircle } from "lucide-react";
+import { Link } from "react-router-dom"; // Removed 'redirect' as it's not needed with useNavigate
+import axios from "axios";
+import { api } from "../hooks/api";
+import { useNavigate } from "react-router-dom";
 
 export default function Connexion() {
   // États
@@ -118,36 +118,6 @@ export default function Connexion() {
     if (validateForm()) {
       setIsSubmitting(true);
 
-      
-
-      axios.post(`${api}/login/`,{email:formData.email, password:formData.password})
-      .then(res=>{
-        localStorage.setItem('token',res.data.access)
-        console.log(localStorage.getItem('token'))
-         useNavigate("./hall")
-         setIsSubmitting(false)
-        setIsSuccess(true)
-        // Réinitialiser le succès après 3 secondes
-         setTimeout(() => {
-          setIsSuccess(false)
-          setFormData({
-            name: "",
-            email: "",
-            password: "",
-            gender: "MASCULIN",
-          })
-          setRecaptchaVerified(false)
-        }, 2000)
-        
-      })
-      .catch(error=>{console.log(error)})
-    }
-  }
-if (localStorage.getItem('token'))
-  {
-          navigation("../hall")
-  }
-
       axios
         .post(`${api}/login/`, { email: formData.email, password: formData.password })
         .then((res) => {
@@ -161,9 +131,10 @@ if (localStorage.getItem('token'))
               email: "",
               password: "",
             });
-            setRecaptchaVerified(false);
-            navigate("/3d-choice"); // Navigate after successful login
+            setRecaptchaVerified(false); 
+            navigate("/hall"); // Navigate to relative path "./hall"
           }, 2000);
+          
         })
         .catch((error) => {
           console.log(error);
@@ -179,13 +150,6 @@ if (localStorage.getItem('token'))
     }
   };
 
-  // Vérifier le token et naviguer si l'utilisateur est déjà connecté
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/3d-choice");
-    }
-  }, [navigate]);
 
   // Charger le script reCAPTCHA
   useEffect(() => {
@@ -205,11 +169,8 @@ if (localStorage.getItem('token'))
 
   return (
     <div
-      className={`min-h-screen flex items-center justify-center p-4 transition-colors duration-300 ${
-        darkMode ? "bg-white" : "bg-black"
-      }`}
+      className={`min-h-screen flex items-center justify-center p-4 transition-colors duration-300 ${darkMode ? "bg-white" : "bg-black"}`}
     >
-      {/* Éléments décoratifs flottants */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute top-20 left-[10%]"
@@ -255,7 +216,7 @@ if (localStorage.getItem('token'))
 
       {/* Conteneur principal */}
       <motion.div
-        className="w-full max-w-md relative z-10"
+        className="relative z-10 w-full max-w-md"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -265,7 +226,7 @@ if (localStorage.getItem('token'))
           {/* Bouton de changement de mode */}
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="ml-2 p-2 rounded-full transition-colors duration-200"
+            className="p-2 ml-2 transition-colors duration-200 rounded-full"
             aria-label={darkMode ? "Activer le mode clair" : "Activer le mode sombre"}
           >
             {darkMode ? <Sun size={18} color={`${darkMode ? "black" : "white"}`} /> : <Moon size={18} color={`${darkMode ? "black" : "white"}`} />}
@@ -275,7 +236,7 @@ if (localStorage.getItem('token'))
           <div className="relative">
             <button
               onClick={() => setLangMenuOpen(!langMenuOpen)}
-              className="flex items-center px-3 py-2 rounded-md transition-colors duration-200"
+              className="flex items-center px-3 py-2 transition-colors duration-200 rounded-md"
             >
               <Globe size={18} className="mr-1" color={`${darkMode ? "black" : "white"}`} />
               <span className={`${darkMode ? "text-black" : "text-white"} uppercase`}>{language}</span>
@@ -322,7 +283,7 @@ if (localStorage.getItem('token'))
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           {/* Sceau décoratif */}
-          <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+          <div className="absolute transform -translate-x-1/2 -top-3 left-1/2">
             <motion.div
               className={`w-12 h-12 rounded-full flex items-center justify-center ${darkMode ? "bg-noir" : "bg-blanc"}`}
               initial={{ y: -20, opacity: 0 }}
@@ -336,7 +297,7 @@ if (localStorage.getItem('token'))
           {/* Contenu du formulaire */}
           <div className="p-8 pt-10">
             {/* Titre */}
-            <div className="text-center mb-8">
+            <div className="mb-8 text-center">
               <motion.h2
                 className={`text-2xl font-serif mb-2 bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-yellow-600`}
                 style={{ fontFamily: "Roboto", fontWeight: "700" }}
@@ -391,7 +352,7 @@ if (localStorage.getItem('token'))
                   />
                   {errors.email && (
                     <motion.p
-                      className="mt-1 text-sm text-red-500 flex items-center"
+                      className="flex items-center mt-1 text-sm text-red-500"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                     >
@@ -439,7 +400,7 @@ if (localStorage.getItem('token'))
                   </button>
                   {errors.password && (
                     <motion.p
-                      className="mt-1 text-sm text-red-500 flex items-center"
+                      className="flex items-center mt-1 text-sm text-red-500"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                     >
@@ -451,11 +412,11 @@ if (localStorage.getItem('token'))
               </div>
 
               {/* reCAPTCHA */}
-              <div className="flex justify-center items-center">
+              <div className="flex items-center justify-center">
                 <div className="g-recaptcha" data-sitekey="6LfV5z0rAAAAAMciyH24vgr4ACjZe251DmipcB4U" data-callback="recaptchaCallback"></div>
                 {errors.recaptcha && (
                   <motion.p
-                    className="mt-1 text-sm text-red-500 flex items-center"
+                    className="flex items-center mt-1 text-sm text-red-500"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
@@ -477,7 +438,7 @@ if (localStorage.getItem('token'))
                 {isSubmitting ? (
                   <div className="flex items-center">
                     <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5"
+                      className="w-5 h-5 mr-3 -ml-1 animate-spin"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -500,14 +461,12 @@ if (localStorage.getItem('token'))
               <AnimatePresence>
                 {isSuccess && (
                   <motion.div
-                    className={`mt-4 p-3 rounded-lg flex items-center ${
-                      darkMode ? "bg-green-900/50 text-green-200" : "bg-green-100 text-green-800"
-                    }`}
+                    className={`mt-4 p-3 rounded-lg flex items-center ${darkMode ? "bg-green-900/50 text-green-200" : "bg-green-100 text-green-800"}`}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                   >
-                    <Check size={18} className="mr-2 flex-shrink-0" />
+                    <Check size={18} className="flex-shrink-0 mr-2" />
                     <span>
                       {Traduction(
                         "Inscription réussie ! Bienvenue dans l'aventure.",
@@ -522,11 +481,11 @@ if (localStorage.getItem('token'))
               {/* Afficher les erreurs serveur */}
               {errors.server && (
                 <motion.div
-                  className="mt-4 p-3 rounded-lg flex items-center bg-red-100 text-red-800"
+                  className="flex items-center p-3 mt-4 text-red-800 bg-red-100 rounded-lg"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                  <AlertCircle size={18} className="mr-2 flex-shrink-0" />
+                  <AlertCircle size={18} className="flex-shrink-0 mr-2" />
                   <span>{errors.server}</span>
                 </motion.div>
               )}
@@ -550,8 +509,3 @@ if (localStorage.getItem('token'))
     </div>
   );
 }
-
-// Définir la fonction de callback globale pour reCAPTCHA
-window.recaptchaCallback = function (value) {
-  document.dispatchEvent(new CustomEvent("recaptchaChange", { detail: value }));
-};

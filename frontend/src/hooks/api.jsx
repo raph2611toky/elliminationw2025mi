@@ -1,1 +1,1 @@
-export const api = "https://backend.ikomtoky.madagascar.webcup.hodi.host/api"
+export const api = "http://192.168.85.213:8000/api"

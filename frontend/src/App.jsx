@@ -4,15 +4,11 @@ import Inscription from './authentification/inscription'
 import Connexion from './authentification/connexion'
 import ChatBotTheEnd from './finalBot/finalBoth'
 import HallDesFins from './hallDesFins/hallDesFins'
-<<<<<<< HEAD
 import Mesfins from './mesFins/mesfin'
-
 import CharacterConfigurator from "./3d/CharacterConfigurator";
-import ResultatEndpage from './endpage/Resultat';
-=======
-
-
->>>>>>> lady
+import ResultatEndpage from './endpage/ResultatEndpage';
+import DeparturePage from './endpage/resultat';
+// import EcrireMaFin from './ecrireMaFin/ecrireMaFin'
 function App() {
   
   return(<>
@@ -25,7 +21,9 @@ function App() {
             <Route path ="/mesfins"  element={<Mesfins/>}/> 
             <Route path ="/mesfin"  element={<Mesfins/>}/> 
             <Route path="/3d-choice" element={<CharacterConfigurator />} />
-            <Route path="/end-page" element={<ResultatEndpage />} />
+            {/* <Route path="/end-page" element={<ResultatEndpage />} /> */}
+            <Route path="/end-page" element={<DeparturePage />} />
+            {/* <Route path="/ecrire-ma-fin" element={<EcrireMaFin/>} /> */}
    </Routes>  
   </>)
 }

@@ -29,6 +29,7 @@ export default function CameraControls() {
       ref={controlsRef}
       enableDamping={true}
       dampingFactor={0.2}
+      // enableZoom={false}
       // Lorsque l'utilisateur commence à interagir, repasser en mode FREE
     />
   )
