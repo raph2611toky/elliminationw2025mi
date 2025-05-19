@@ -186,3 +186,6 @@ python manage.py runserver
 [Accès Admin](https://backend.ikomtoky.madagascar.webcup.hodi.host/admin)
 
 ![admin page](./captures/admin-page.png)
+
+
+Vous pouvez voir le lien YouTube [ici](https://www.youtube.com/watch?v=Z4l8QNyesuc)
