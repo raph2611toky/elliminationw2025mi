@@ -183,6 +183,6 @@ python manage.py runserver
 
 ### Page d’administration Django
 
-[Accès Admin](https://backend.ikomtoky.webcup.hodi.host/admin)
+[Accès Admin](https://backend.ikomtoky.madagascar.webcup.hodi.host/admin)
 
 ![admin page](./captures/admin-page.png)
